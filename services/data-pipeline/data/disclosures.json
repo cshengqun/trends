@@ -753,6 +753,36 @@
             "revenue": "88174939",
             "net_income": "6838123"
           }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "106101612000",
+            "net_income": "9000007000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "111172474000",
+            "net_income": "11804169000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "101700575000",
+            "net_income": "10894938000"
+          }
         }
       ]
     },
@@ -851,6 +881,36 @@
             "revenue": "9485298203.09",
             "net_income": "1158667747.47"
           }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "5859163380.59",
+            "net_income": "1126550627.36"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "6475743823.69",
+            "net_income": "1654053673.89"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "8017863754.89",
+            "net_income": "1681917060.31"
+          }
         }
       ]
     },
@@ -948,6 +1008,36 @@
           "values": {
             "revenue": "102967805",
             "net_income": "14743608"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "79770779000",
+            "net_income": "10509923000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "86996055000",
+            "net_income": "12355064000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "92277915000",
+            "net_income": "13136086000"
           }
         }
       ]
@@ -1056,6 +1146,36 @@
             "revenue": "8261425483.84",
             "net_income": "642867884.52"
           }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "4377729053.27",
+            "net_income": "310694250.33"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "5270598168.54",
+            "net_income": "561431935.84"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "6800327623.69",
+            "net_income": "599435456.26"
+          }
         }
       ]
     },
@@ -1154,6 +1274,36 @@
             "revenue": "84779",
             "net_income": "35207"
           }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "86417000000",
+            "net_income": "38077000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "86528000000",
+            "net_income": "36666000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "79764000000",
+            "net_income": "38441000000"
+          }
         }
       ]
     },
@@ -1251,6 +1401,36 @@
           "values": {
             "revenue": "26660376531.26",
             "net_income": "-2415620352.16"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "32462896350.54",
+            "net_income": "5922814507.71"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "27232860611.05",
+            "net_income": "1608319620.91"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "29037177483.84",
+            "net_income": "3337346216.72"
           }
         }
       ]
@@ -1360,6 +1540,36 @@
             "revenue": "18161189820.97",
             "net_income": "4471249595.83"
           }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "15640900490.43",
+            "net_income": "3966850824.31"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "19167409511.70",
+            "net_income": "7395474393.44"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "31522370743.42",
+            "net_income": "16662597995.07"
+          }
         }
       ]
     },
@@ -1457,6 +1667,36 @@
           "values": {
             "revenue": "94482",
             "net_income": "21277"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "111468000000",
+            "net_income": "39719000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "115302000000",
+            "net_income": "40012000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "99254000000",
+            "net_income": "36928000000"
           }
         }
       ]
@@ -1565,6 +1805,36 @@
             "revenue": "249301",
             "net_income": "27492"
           }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "263707000000",
+            "net_income": "29609000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "283037000000",
+            "net_income": "50592000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "244714000000",
+            "net_income": "30680000000"
+          }
         }
       ]
     },
@@ -1662,6 +1932,36 @@
           "values": {
             "revenue": "253542",
             "net_income": "7425"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "245569000000",
+            "net_income": "36709000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "249397000000",
+            "net_income": "37910000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "280417000000",
+            "net_income": "44563000000"
           }
         }
       ]
@@ -2126,6 +2426,1019 @@
         {
           "label": "美团 2026 年第一季度业绩公告 · 合并损益及同期",
           "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0601/2026060101346.pdf"
+        }
+      ]
+    },
+    {
+      "symbol": "000333.SZ",
+      "published": "2023-04-29",
+      "label": "美的集团 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-04-29/1216695045.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "73550778000",
+            "net_income": "5083586000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "000333.SZ",
+      "published": "2024-03-28",
+      "label": "美的集团 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-03-28/1219429374.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "96262922000",
+            "net_income": "8041853000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "100725480000",
+            "net_income": "10190438000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "94122108000",
+            "net_income": "9485190000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "80926770000",
+            "net_income": "6002454000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600036.SH",
+      "published": "2023-03-25",
+      "label": "招商银行 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-03-25/1216221326.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "79950000000",
+            "net_income": "31090000000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600036.SH",
+      "published": "2024-03-26",
+      "label": "招商银行 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-03-26/1219403503.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "90636000000",
+            "net_income": "38839000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "87824000000",
+            "net_income": "36913000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "81819000000",
+            "net_income": "38138000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "78844000000",
+            "net_income": "32712000000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "002371.SZ",
+      "published": "2023-04-29",
+      "label": "北方华创 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-04-29/1216690486.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "4675810477.30",
+            "net_income": "666622811.92"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "002371.SZ",
+      "published": "2024-04-30",
+      "label": "北方华创 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-04-30/1219908921.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "3871132953.79",
+            "net_income": "591683918.04"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "4555457133.74",
+            "net_income": "1207552604.52"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "6161772205.34",
+            "net_income": "1084980156.17"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "7491095799.50",
+            "net_income": "1014853309.18"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600900.SH",
+      "published": "2023-04-28",
+      "label": "长江电力 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-04-28/1216664110.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "10791022836.05",
+            "net_income": "2364901203.78"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600900.SH",
+      "published": "2024-04-30",
+      "label": "长江电力 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-04-30/1219922588.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "15397466574.25",
+            "net_income": "3612922772.00"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "15577428445.37",
+            "net_income": "5269144988.22"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "26880240634.80",
+            "net_income": "12641778084.74"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "20256437611.33",
+            "net_income": "5715125015.74"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600941.SH",
+      "published": "2024-03-22",
+      "label": "中国移动 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-03-22/1219372942.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "250746000000",
+            "net_income": "28067000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "279973000000",
+            "net_income": "48106000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "244841000000",
+            "net_income": "29333000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "233749000000",
+            "net_income": "26260000000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "601318.SH",
+      "published": "2024-03-22",
+      "label": "中国平安 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-03-22/1219376072.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "253778000000",
+            "net_income": "38352000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "235005000000",
+            "net_income": "31489000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "216155000000",
+            "net_income": "17734000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "208851000000",
+            "net_income": "-1910000000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600938.SH",
+      "published": "2023-03-30",
+      "label": "中国海油 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-03-30/1216259494.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "111085000000",
+            "net_income": "32932000000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600938.SH",
+      "published": "2024-03-22",
+      "label": "中国海油 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-03-22/1219375212.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "97711000000",
+            "net_income": "32113000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "94353000000",
+            "net_income": "31648000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "114753000000",
+            "net_income": "33884000000"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "109792000000",
+            "net_income": "26198000000"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600887.SH",
+      "published": "2023-04-28",
+      "label": "伊利股份 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-04-28/1216664083.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "29198184756.07",
+            "net_income": "1369966303.59"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600887.SH",
+      "published": "2024-04-30",
+      "label": "伊利股份 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-04-30/1219916433.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "33328470170.19",
+            "net_income": "3615021381.48"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "32653752097.34",
+            "net_income": "2690155409.56"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "31108604645.06",
+            "net_income": "3074918131.13"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "28667342003.92",
+            "net_income": "1048445535.77"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300866.SZ",
+      "published": "2023-04-19",
+      "label": "安克创新 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-04-19/1216460035.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "4713994870.07",
+            "net_income": "312820214.05"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300866.SZ",
+      "published": "2024-04-25",
+      "label": "安克创新 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-04-25/1219800919.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "3365103838.16",
+            "net_income": "305807117.41"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "3700588301.67",
+            "net_income": "514197541.94"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "4720773695.31",
+            "net_income": "393233909.15"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "5720737309.11",
+            "net_income": "401633393.31"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300750.SZ",
+      "published": "2023-03-10",
+      "label": "宁德时代 2022 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2023-03-10/1216084559.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "118253747000.00",
+            "net_income": "13137571800.00"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300750.SZ",
+      "published": "2024-03-16",
+      "label": "宁德时代 2023 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2024-03-16/1219313047.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "89038465300.00",
+            "net_income": "9822265100.00"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "100207576000.00",
+            "net_income": "10894999400.00"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "105431209300.00",
+            "net_income": "10428209100.00"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "106239794300.00",
+            "net_income": "12975774800.00"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2024-05-14",
+      "label": "腾讯 财务业绩公告 · 单季度及同期",
+      "url": "https://static.www.tencent.com/uploads/2024/05/14/207c400f3d6e2d9894c0b9b778507cf1.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "149986",
+            "net_income": "25838"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "159501",
+            "net_income": "41889"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2024-08-14",
+      "label": "腾讯 财务业绩公告 · 单季度及同期",
+      "url": "https://static.www.tencent.com/uploads/2024/08/14/027889ef78b4ed2b83337dd4a7c2ffef.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "149208",
+            "net_income": "26171"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "161117",
+            "net_income": "47630"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2024-11-13",
+      "label": "腾讯 财务业绩公告 · 单季度及同期",
+      "url": "https://static.www.tencent.com/uploads/2024/11/13/fc23e847ab5be9093587be6b7b01c115.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "154625",
+            "net_income": "36182"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2025-03-19",
+      "label": "腾讯 财务业绩公告 · 单季度及同期",
+      "url": "https://static.www.tencent.com/uploads/2025/03/19/81cb1f36bec218d27d6e0b24eec012b6.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "155196",
+            "net_income": "27025"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2024-05-14",
+      "label": "阿里巴巴 财务业绩公告 · 单季度及同期",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/afdeaf9e-5dd7-4a18-8ff0-968a6807f09d/Alibaba%20Group%20Announces%20March%20Quarter%202024%20and%20Fiscal%20Year%202024%20Results.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "208200",
+            "net_income": "23644"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "221874",
+            "net_income": "3365"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2024-08-15",
+      "label": "阿里巴巴 财务业绩公告 · 单季度及同期",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/a28fac87-995c-4e9a-8c0d-117023fa13fb/Alibaba%20Group%20Announces%20June%20Quarter%202024%20Results.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "234156",
+            "net_income": "34242"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "243236",
+            "net_income": "24390"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2024-11-15",
+      "label": "阿里巴巴 财务业绩公告 · 单季度及同期",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/0cfe1fbc-94d9-4e25-a163-7e9fcab9fcb8/Alibaba%20Group%20Announces%20September%20Quarter%202024%20Results.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "224790",
+            "net_income": "27847"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2025-02-20",
+      "label": "阿里巴巴 财务业绩公告 · 单季度及同期",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/de0aaac9-4fd5-4a17-8762-526616f36ca8/Alibaba%20Group%20Announces%20December%20Quarter%202024%20Results.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "260348",
+            "net_income": "14555"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2024-05-23",
+      "label": "小米集团 财务业绩公告 · 单季度及同期",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/0523/2024052300767.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "59477134",
+            "net_income": "4203839"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "75506822",
+            "net_income": "4182061"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2024-08-21",
+      "label": "小米集团 财务业绩公告 · 单季度及同期",
+      "url": "https://ir.mi.com/system/files-encrypted/nasdaq_kms/assets/2024/08/21/5-44-48/Announcement.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "67354908",
+            "net_income": "3669975"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "88887828",
+            "net_income": "5098002"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2024-11-18",
+      "label": "小米集团 财务业绩公告 · 单季度及同期",
+      "url": "https://ir.mi.com/system/files-encrypted/nasdaq_kms/assets/2024/11/18/5-32-31/24Q3_Announcement.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "70894412",
+            "net_income": "4873861"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2025-03-18",
+      "label": "小米集团 财务业绩公告 · 单季度及同期",
+      "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0318/2025031801045.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "73243687",
+            "net_income": "4727498"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "小米集团 2024 年第三季度公告 · 前三季度累计",
+          "url": "https://ir.mi.com/system/files-encrypted/nasdaq_kms/assets/2024/11/18/5-32-31/24Q3_Announcement.pdf"
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2024-06-06",
+      "label": "美团 财务业绩公告 · 单季度及同期",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/0606/2024060600447.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "58617472",
+            "net_income": "3358233"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "73275884",
+            "net_income": "5368538"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2023-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "73695951",
+            "net_income": "2216702"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2024-08-28",
+      "label": "美团 财务业绩公告 · 单季度及同期",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/0828/2024082800345.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "67964624",
+            "net_income": "4687870"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2024-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "82251077",
+            "net_income": "11351921"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "美团 2024 年第一季度公告 · 两年单季对照",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/0606/2024060600447.pdf"
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2024-11-29",
+      "label": "美团 财务业绩公告 · 单季度及同期",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/1129/2024112900543.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2023-09-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "76466907",
+            "net_income": "3593023"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2024-03-22",
+      "label": "美团 2023 年全年业绩公告 · 第四季度营收",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/0322/2024032200337.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2022-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "60128939"
+          }
         }
       ]
     }

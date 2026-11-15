@@ -1,5 +1,5 @@
-import { InsightDetail } from "@/components/insight";
+import { redirect } from "next/navigation";
 
-export default async function InsightPage({ params }: { params: Promise<{ id: string }> }) {
-  return <InsightDetail id={(await params).id} />;
+export default function InsightPage() {
+  redirect("/stocks");
 }

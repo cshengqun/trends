@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, ArrowUpRight, Compass, Database, Layers3, Search } from "lucide-react";
+import { Activity, ArrowUpRight, Database, Layers3, Search } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { createContext, useContext, useState, type FormEvent, type ReactNode } from "react";
@@ -40,20 +40,17 @@ export function Shell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const overview = useData<Overview>("/overview");
   const kind = overview.status === "success" ? overview.data.data_kind : undefined;
-  const links = [["/", "趋势发现", Compass], ["/stocks", "股票探索", Layers3]] as const;
+  const active = pathname.startsWith("/stocks");
   return <DataContext.Provider value={kind}><div className="shell">
     <aside className="sidebar">
-      <Link href="/" className="brand"><span className="brand-icon"><Activity size={22} /></span><span>Trends<span className="brand-dot">.</span></span></Link>
+      <Link href="/stocks" className="brand"><span className="brand-icon"><Activity size={22} /></span><span>Trends<span className="brand-dot">.</span></span></Link>
       <nav className="navigation" aria-label="主导航">
         <div className="nav-caption">研究工作台</div>
-        {links.map(([url, name, Icon]) => {
-          const active = url === "/" ? pathname === "/" || pathname.startsWith("/insights/") : pathname.startsWith("/stocks");
-          return <Link href={url} key={url} className={active ? "nav-link active" : "nav-link"} aria-current={active ? "page" : undefined}>
-            <Icon size={18} />{name}
-          </Link>;
-        })}
+        <Link href="/stocks" className={active ? "nav-link active" : "nav-link"} aria-current={active ? "page" : undefined}>
+          <Layers3 size={18} />股票探索
+        </Link>
       </nav>
-      <div className="sidebar-status"><Database size={16} /><div><strong>数据来源</strong><small>{kind === "official" ? "公司公告与财报" : kind === "mock" ? "Mock · 年度财务样本" : "—"}</small></div></div>
+      <div className="sidebar-status"><Database size={16} /><div><strong>数据来源</strong><small>{kind === "official" ? "公司披露与市场数据" : kind === "mock" ? "Mock · 年度财务样本" : "—"}</small></div></div>
     </aside>
     <div className="main-shell">
       <header className="topbar"><CompanySearch /><DataLabel /></header>

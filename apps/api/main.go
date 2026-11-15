@@ -173,6 +173,41 @@ func (s server) series(w http.ResponseWriter, r *http.Request) {
 		) t), '[]') END`, entity, metric, period, s.quality())
 }
 
+func (s server) quarterlyDashboard(w http.ResponseWriter, r *http.Request) {
+	s.query(w, r, `WITH quarter_window AS (
+		SELECT (date_trunc('quarter', now() AT TIME ZONE 'Asia/Shanghai')::date - 1) AS end_date
+	), selected AS (
+		SELECT DISTINCT ON (metric_id, period_end) id
+		FROM observations, quarter_window
+		WHERE entity_id=$1 AND quality_status=$2 AND period_type='quarterly' AND available_at<=now()
+		  AND metric_id IN ('revenue','net_income','pe_ttm','dividend_yield')
+		  AND period_end > end_date - interval '4 years' AND period_end <= end_date
+		ORDER BY metric_id, period_end, revision DESC
+	), base AS (`+observationProjection+` JOIN selected ON o.id=selected.id), points AS (
+		SELECT to_jsonb(b) AS point, b.metric_id, b.period_end FROM base b
+		UNION ALL
+		SELECT to_jsonb(b) || jsonb_build_object(
+			'metric_id', growth.metric_id, 'metric_name', definition.name, 'unit', '%', 'currency', '',
+			'value', round(100 * (b.value / prior.value - 1), 6),
+			'available_at', greatest(b.available_at, prior.available_at),
+			'supporting_documents', b.supporting_documents ||
+				jsonb_build_array(jsonb_build_object('label', prior.source_label, 'url', prior.document_ref)) ||
+				prior.supporting_documents
+		), growth.metric_id, b.period_end
+		FROM base b JOIN base prior ON prior.metric_id=b.metric_id
+			AND prior.period_end + interval '1 year'=b.period_end
+			AND prior.currency=b.currency AND prior.unit=b.unit AND prior.value>0
+		JOIN (VALUES ('revenue','revenue_growth'), ('net_income','profit_growth')) growth(base_id,metric_id)
+			ON growth.base_id=b.metric_id
+		JOIN metrics definition ON definition.id=growth.metric_id
+	)
+	SELECT jsonb_build_object('end_date', end_date, 'points',
+		coalesce((SELECT jsonb_agg(point ORDER BY period_end, metric_id) FROM points
+			WHERE period_end > quarter_window.end_date - interval '3 years'), '[]'))
+	FROM quarter_window WHERE EXISTS (SELECT 1 FROM entities WHERE id=$1)`,
+		strings.ToUpper(r.PathValue("id")), s.quality())
+}
+
 const insightProjection = `
 	SELECT i.*, e.name AS entity_name, e.symbol, m.name AS metric_name, m.unit AS metric_unit,
 		(SELECT max(o.available_at) FROM insight_evidence ie JOIN observations o ON o.id=ie.observation_id
@@ -252,6 +287,7 @@ func (s server) routes(web http.Handler, basePath string) http.Handler {
 	mux.HandleFunc("GET "+api+"/v1/overview", s.overview)
 	mux.HandleFunc("GET "+api+"/v1/entities", s.entities)
 	mux.HandleFunc("GET "+api+"/v1/entities/{id}", s.entity)
+	mux.HandleFunc("GET "+api+"/v1/entities/{id}/quarterly", s.quarterlyDashboard)
 	mux.HandleFunc("GET "+api+"/v1/metrics", s.metrics)
 	mux.HandleFunc("GET "+api+"/v1/series", s.series)
 	mux.HandleFunc("GET "+api+"/v1/insights", s.insights)

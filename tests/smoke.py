@@ -4,6 +4,7 @@ import json
 import sys
 import time
 from urllib.error import URLError
+from decimal import Decimal
 from urllib.parse import urlencode
 from urllib.request import urlopen
 
@@ -85,6 +86,20 @@ def verify_disclosures_api():
     midea = api("/series", entity_id="000333.SZ", metric_id="revenue", period="quarterly")
     derived = next(row for row in midea if row["period_end"] == "2026-06-30")
     assert derived["value"] == 128.943889 and derived["supporting_documents"][0]["url"].startswith("https://")
+    dashboard = api("/entities/000333.SZ/quarterly")
+    by_metric = {}
+    for point in dashboard["points"]:
+        by_metric.setdefault(point["metric_id"], {})[point["period_end"]] = point
+    assert dashboard["end_date"] >= "2026-09-30"
+    current = by_metric["revenue_growth"]["2026-09-30"]
+    revenue = by_metric["revenue"]
+    expected_growth = round((Decimal(str(revenue["2026-09-30"]["value"])) /
+                             Decimal(str(revenue["2025-09-30"]["value"])) - 1) * 100, 6)
+    assert Decimal(str(current["value"])) == expected_growth
+    assert len(current["supporting_documents"]) >= 1
+    if dashboard["end_date"] == "2026-09-30":
+        assert len(revenue) == 12 and "2023-12-31" in revenue
+    assert by_metric["profit_growth"]["2026-09-30"]["unit"] == "%"
     mau = api("/series", entity_id="1810.HK", metric_id="global_mau", period="monthly")
     months = {row["period_end"]: row["value"] for row in mau}
     assert months.get("2025-12-31") == 754.1 and months.get("2026-06-30") == 766.5
@@ -106,42 +121,24 @@ def verify_browser(kind):
         browser = playwright.chromium.launch()
         page = browser.new_page(viewport={"width": 1400, "height": 900})
         page.goto(BASE)
-        expect(page.get_by_role("heading", name="趋势发现")).to_be_visible()
-        expect(page.locator(".featured canvas")).to_be_visible(timeout=15000)
-        if kind == "official":
-            page.get_by_role("link", name="股票探索", exact=True).click()
-            search = page.get_by_role("searchbox", name="筛选公司")
-            search.fill("小米")
-            page.get_by_role("link", name="小米集团", exact=False).first.click()
-            expect(page.get_by_role("img", name="营业收入季度趋势图")).to_be_visible()
-            expect(page.get_by_role("button", name="2 年", exact=True)).to_have_attribute("aria-pressed", "true")
-            page.get_by_role("button", name="年度", exact=True).click()
-            expect(page.get_by_role("img", name="营业收入年度趋势图")).to_be_visible()
-            page.get_by_label("财务指标").select_option("global_mau")
-            expect(page.get_by_role("img", name="全球月活跃用户月度趋势图")).to_be_visible()
-            expect(page.get_by_role("link", name="小米 2026 年第二季度业绩公告")).to_be_visible()
-            browser.close()
-            return
-        page.get_by_role("button", name="现金流", exact=True).click()
-        page.get_by_role("link", name="利润与现金流背离").click()
-        expect(page.get_by_role("heading", name="美团 · 利润与现金流背离")).to_be_visible()
-        expect(page.locator("tbody tr")).to_have_count(6)
-        page.get_by_role("link", name="趋势发现", exact=True).first.click()
-        top_search = page.locator("header").get_by_role("searchbox")
-        top_search.fill("小米")
-        top_search.press("Enter")
-        expect(page.get_by_role("link", name="小米集团", exact=False).first).to_be_visible()
+        expect(page.get_by_role("heading", name="股票探索")).to_be_visible()
+        expect(page.get_by_role("link", name="趋势发现", exact=True)).to_have_count(0)
+        search = page.get_by_role("searchbox", name="筛选公司")
+        search.fill("小米")
         page.get_by_role("link", name="小米集团", exact=False).first.click()
         expect(page.get_by_role("heading", name="小米集团")).to_be_visible()
-        page.get_by_label("财务指标").select_option("net_margin")
-        page.get_by_role("button", name="3 年", exact=True).click()
-        page.get_by_role("button", name="柱状图").click()
-        expect(page.get_by_role("img", name="净利率年度趋势图")).to_be_visible()
-        expect(page.locator(".chart-full canvas")).to_be_visible()
+        for metric in ("营收", "营收增长率", "利润", "利润增长率", "PE", "股息率"):
+            expect(page.get_by_role("img", name=metric + "季度趋势图", exact=True)).to_be_visible()
+        expect(page.locator(".quarterly-plot canvas")).to_have_count(6)
+        expect(page.get_by_text("近 3 年", exact=False)).to_be_visible()
+        if kind == "official":
+            page.get_by_text("指标数据来源", exact=True).click()
+            expect(page.get_by_role("link", name="小米 2026 年第二季度业绩公告")).to_be_visible()
 
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
-        mobile.goto(BASE)
-        expect(mobile.locator(".featured canvas")).to_be_visible()
+        mobile.goto(page.url)
+        expect(mobile.get_by_role("heading", name="小米集团")).to_be_visible()
+        expect(mobile.get_by_role("img", name="营收季度趋势图", exact=True)).to_be_visible()
         assert mobile.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
         browser.close()
 

@@ -11,24 +11,28 @@ use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRenderer]);
 
 type Option = ComposeOption<BarSeriesOption | LineSeriesOption | GridComponentOption | TooltipComponentOption>;
 
-export function Chart({ points, unit, label, mode = "line", size = "full", down = false, axisUnit, period = "annual" }: {
+function monthIndex(value: string) {
+  return Number(value.slice(0, 4)) * 12 + Number(value.slice(5, 7)) - 1;
+}
+
+export function Chart({ points, unit, label, mode = "line", size = "full", down = false, axisUnit, period = "annual", startDate, endDate }: {
   points: Point[]; unit: string; label: string; mode?: "line" | "bar";
   size?: "full" | "spark" | "hero"; down?: boolean; axisUnit?: string; period?: Period;
+  startDate?: string; endDate?: string;
 }) {
   const element = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (!element.current || points.length === 0) return;
+    if (!element.current || (!points.length && (!startDate || !endDate))) return;
     const spark = size === "spark";
     const hero = size === "hero";
     const color = down ? "#f4a37d" : "#64efbc";
     const step = period === "annual" ? 12 : period === "quarterly" ? 3 : 1;
-    const values = new Map(points.map(({ period_end, value }) => {
-      const index = Number(period_end.slice(0, 4)) * 12 + Number(period_end.slice(5, 7)) - 1;
-      return [index, unit === "billion" ? value * 10 : value];
-    }));
+    const values = new Map(points.map(({ period_end, value }) =>
+      [monthIndex(period_end), unit === "billion" ? value * 10 : value]));
     const dates = [...values.keys()];
-    const start = Math.min(...dates);
-    const indices = spark ? dates : Array.from({ length: Math.floor((Math.max(...dates) - start) / step) + 1 },
+    const start = startDate ? monthIndex(startDate) : Math.min(...dates);
+    const end = endDate ? monthIndex(endDate) : Math.max(...dates);
+    const indices = spark ? dates : Array.from({ length: Math.floor((end - start) / step) + 1 },
       (_, i) => start + i * step);
     const labels = indices.map((index) => periodLabel(
       Math.floor(index / 12) + "-" + String(index % 12 + 1).padStart(2, "0"), period));
@@ -70,7 +74,7 @@ export function Chart({ points, unit, label, mode = "line", size = "full", down 
     const observer = new ResizeObserver(() => graph.resize());
     observer.observe(element.current);
     return () => { observer.disconnect(); graph.dispose(); };
-  }, [points, unit, label, mode, size, down, axisUnit, period]);
+  }, [points, unit, label, mode, size, down, axisUnit, period, startDate, endDate]);
   return <div ref={element} className={`chart chart-${size}`} role={size === "spark" ? undefined : "img"}
     aria-hidden={size === "spark" || undefined} aria-label={size === "spark" ? undefined : label + periodNames[period] + "趋势图"} />;
 }
