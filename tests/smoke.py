@@ -78,9 +78,10 @@ def verify_disclosures_api():
     }
     hong_kong_quarters = domestic_quarters - {"2026-09-30"} | {"2024-09-30"}
     for symbol in expected - {"0100.HK", "2513.HK", "9880.HK"}:
-        quarterly = api("/series", entity_id=symbol, metric_id="revenue", period="quarterly")
         expected_quarters = hong_kong_quarters if symbol.endswith(".HK") else domestic_quarters
-        assert expected_quarters.issubset({row["period_end"] for row in quarterly}), symbol
+        for metric in ("revenue", "net_income"):
+            quarterly = api("/series", entity_id=symbol, metric_id=metric, period="quarterly")
+            assert expected_quarters.issubset({row["period_end"] for row in quarterly}), (symbol, metric)
     midea = api("/series", entity_id="000333.SZ", metric_id="revenue", period="quarterly")
     derived = next(row for row in midea if row["period_end"] == "2026-06-30")
     assert derived["value"] == 128.943889 and derived["supporting_documents"][0]["url"].startswith("https://")

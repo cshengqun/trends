@@ -533,40 +533,6 @@
       ]
     },
     {
-      "symbol": "3690.HK",
-      "published": "2025-08-27",
-      "label": "美团 2025 年第二季度业绩新闻稿（披露精度）",
-      "url": "https://www.meituan.com/news/NN250827125003917",
-      "rows": [
-        {
-          "period": "quarterly",
-          "end": "2025-06-30",
-          "currency": "CNY",
-          "scale": "billion",
-          "values": {
-            "revenue": "91.8"
-          }
-        }
-      ]
-    },
-    {
-      "symbol": "3690.HK",
-      "published": "2026-08-28",
-      "label": "美团 2026 年第二季度业绩新闻稿（披露精度）",
-      "url": "https://www.meituan.com/news/NN260828216013035",
-      "rows": [
-        {
-          "period": "quarterly",
-          "end": "2026-06-30",
-          "currency": "CNY",
-          "scale": "billion",
-          "values": {
-            "revenue": "104.6"
-          }
-        }
-      ]
-    },
-    {
       "symbol": "1810.HK",
       "published": "2026-03-24",
       "label": "小米 2025 年业绩公告",
@@ -2063,15 +2029,6 @@
       "rows": [
         {
           "period": "quarterly",
-          "end": "2024-12-31",
-          "currency": "CNY",
-          "scale": "million",
-          "values": {
-            "revenue": "88487.296"
-          }
-        },
-        {
-          "period": "quarterly",
           "end": "2025-12-31",
           "currency": "CNY",
           "scale": "million",
@@ -2084,9 +2041,9 @@
     },
     {
       "symbol": "3690.HK",
-      "published": "2024-11-29",
-      "label": "美团 2024 年第三季度业绩 · 公司公告",
-      "url": "https://www.meituan.com/news/NN241129066007115",
+      "published": "2025-11-28",
+      "label": "美团 2025 年第三季度业绩公告 · 合并损益及同期",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1128/2025112800483.pdf",
       "rows": [
         {
           "period": "quarterly",
@@ -2094,25 +2051,81 @@
           "currency": "CNY",
           "scale": "million",
           "values": {
-            "revenue": "93600"
+            "revenue": "93577.319",
+            "net_income": "12864.699"
           }
-        }
-      ]
-    },
-    {
-      "symbol": "3690.HK",
-      "published": "2025-11-28",
-      "label": "美团 2025 年第三季度业绩 · 公司公告",
-      "url": "https://www.meituan.com/news/NN251128093005515",
-      "rows": [
+        },
         {
           "period": "quarterly",
           "end": "2025-09-30",
           "currency": "CNY",
           "scale": "million",
           "values": {
-            "revenue": "95500"
+            "revenue": "95488.113",
+            "net_income": "-18632.454"
           }
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2025-03-21",
+      "label": "美团 2024 年全年业绩公告 · 第四季度营收及全年减前三季度归母净利",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/0321/2025032100435.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "88487.296",
+            "net_income": "6222.021"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "美团 2025 年中期业绩公告 · 2024 年上半年同期",
+          "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2025/0827/2025082700397.pdf"
+        },
+        {
+          "label": "美团 2024 年第三季度业绩公告 · 单季",
+          "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2024/1129/2024112900543.pdf"
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2026-08-28",
+      "label": "美团 2026 年中期业绩公告 · 第二季度营收及半年减第一季度归母净利",
+      "url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0828/2026082800435.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "91490.217",
+            "net_income": "364.817"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "104643.044",
+            "net_income": "2154.927"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "美团 2026 年第一季度业绩公告 · 合并损益及同期",
+          "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0601/2026060101346.pdf"
         }
       ]
     }
