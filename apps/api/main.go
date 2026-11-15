@@ -1,0 +1,282 @@
+package main
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"log"
+	"net/http"
+	"net/http/httputil"
+	"net/url"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type server struct {
+	db *pgxpool.Pool
+}
+
+type envelope struct {
+	Data  any       `json:"data,omitempty"`
+	Error *apiError `json:"error,omitempty"`
+}
+
+type apiError struct {
+	Code    string `json:"code"`
+	Message string `json:"message"`
+}
+
+func send(w http.ResponseWriter, status int, body envelope) {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.Header().Set("Cache-Control", "no-store")
+	w.WriteHeader(status)
+	if err := json.NewEncoder(w).Encode(body); err != nil {
+		log.Printf("encode response: %v", err)
+	}
+}
+
+func fail(w http.ResponseWriter, status int, code, message string) {
+	send(w, status, envelope{Error: &apiError{Code: code, Message: message}})
+}
+
+func (s server) query(w http.ResponseWriter, r *http.Request, query string, args ...any) {
+	ctx, cancel := context.WithTimeout(r.Context(), 5*time.Second)
+	defer cancel()
+	var data json.RawMessage
+	err := s.db.QueryRow(ctx, query, args...).Scan(&data)
+	switch {
+	case errors.Is(err, pgx.ErrNoRows), err == nil && string(data) == "null":
+		fail(w, 404, "not_found", "没有找到对应的记录")
+	case err != nil:
+		log.Printf("query %s: %v", r.URL.Path, err)
+		fail(w, 503, "data_unavailable", "数据服务暂时不可用")
+	default:
+		send(w, 200, envelope{Data: data})
+	}
+}
+
+func pagination(q url.Values) (int, int, bool) {
+	limit, offset := 30, 0
+	var err error
+	if q.Has("limit") {
+		limit, err = strconv.Atoi(q.Get("limit"))
+		if err != nil || limit < 1 || limit > 100 {
+			return 0, 0, false
+		}
+	}
+	if q.Has("offset") {
+		offset, err = strconv.Atoi(q.Get("offset"))
+		if err != nil || offset < 0 || offset > 1000000 {
+			return 0, 0, false
+		}
+	}
+	return limit, offset, true
+}
+
+const entityProjection = `
+	SELECT e.*, latest.period_end AS latest_period, latest.data_updated_at
+	FROM entities e
+	LEFT JOIN LATERAL (
+		SELECT max(period_end) AS period_end, max(available_at) AS data_updated_at
+		FROM observations WHERE entity_id = e.id AND available_at <= now()
+	) latest ON true
+`
+
+func (s server) entities(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	limit, offset, ok := pagination(q)
+	market := q.Get("market")
+	search := strings.TrimSpace(q.Get("q"))
+	if !ok || len(search) > 120 || (market != "" && market != "HK" && market != "CN") {
+		fail(w, 400, "invalid_query", "搜索、市场或分页参数无效")
+		return
+	}
+	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY t.symbol), '[]') FROM (`+entityProjection+`
+		WHERE kind = 'stock' AND ($1 = '' OR strpos(lower(name), lower($1)) > 0 OR strpos(lower(symbol), lower($1)) > 0)
+		AND ($2 = '' OR market = $2) ORDER BY symbol LIMIT $3 OFFSET $4
+	) t`, search, market, limit, offset)
+}
+
+func (s server) entity(w http.ResponseWriter, r *http.Request) {
+	s.query(w, r, `SELECT to_jsonb(t) || jsonb_build_object('latest_metrics', (
+		SELECT coalesce(jsonb_agg(to_jsonb(metric) ORDER BY display_order), '[]') FROM (
+			SELECT DISTINCT ON (o.metric_id) o.metric_id, m.name, m.category, m.display_order,
+				o.value, o.unit, o.currency, o.period_end
+			FROM observations o JOIN metrics m ON m.id=o.metric_id
+			WHERE o.entity_id=t.id AND o.period_type='annual' AND o.available_at <= now()
+				AND o.period_end=(SELECT max(period_end) FROM observations
+					WHERE entity_id=t.id AND period_type='annual' AND available_at <= now())
+			ORDER BY o.metric_id, o.revision DESC
+		) metric
+	)) FROM (`+entityProjection+` WHERE e.id = $1) t`,
+		strings.ToUpper(r.PathValue("id")))
+}
+
+func (s server) metrics(w http.ResponseWriter, r *http.Request) {
+	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(m) ORDER BY display_order), '[]') FROM metrics m`)
+}
+
+const observationProjection = `
+	SELECT o.id, o.entity_id, o.metric_id, m.name AS metric_name, o.period_start, o.period_end,
+	       o.period_type, o.published_at, o.available_at, o.value, o.currency, o.unit, o.source_id,
+	       o.calculation_version, o.quality_status, o.revision, s.kind AS source_kind,
+	       s.label AS source_label, s.document_ref
+	FROM observations o JOIN sources s ON s.id=o.source_id JOIN metrics m ON m.id=o.metric_id
+`
+
+func (s server) series(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	entity, metric, period := strings.ToUpper(q.Get("entity_id")), q.Get("metric_id"), q.Get("period")
+	if period == "" {
+		period = "annual"
+	}
+	if entity == "" || metric == "" || len(entity) > 80 || len(metric) > 80 ||
+		(period != "annual" && period != "quarterly") {
+		fail(w, 400, "invalid_query", "请指定公司、指标及有效的财务期间")
+		return
+	}
+	s.query(w, r, `SELECT CASE WHEN
+		EXISTS (SELECT 1 FROM entities WHERE id=$1) AND EXISTS (SELECT 1 FROM metrics WHERE id=$2)
+		THEN coalesce((SELECT jsonb_agg(to_jsonb(t) ORDER BY period_end) FROM (`+observationProjection+`
+			JOIN (SELECT DISTINCT ON (period_end) id FROM observations
+			      WHERE entity_id=$1 AND metric_id=$2 AND period_type=$3 AND available_at <= now()
+			      ORDER BY period_end, revision DESC) latest ON latest.id=o.id
+		) t), '[]') END`, entity, metric, period)
+}
+
+const insightProjection = `
+	SELECT i.*, e.name AS entity_name, e.symbol, m.name AS metric_name,
+		(SELECT max(o.available_at) FROM insight_evidence ie JOIN observations o ON o.id=ie.observation_id
+		 WHERE ie.insight_id=i.id) AS data_updated_at,
+		coalesce((
+			SELECT jsonb_agg(jsonb_build_object('period_end',period_end,'value',value) ORDER BY period_end)
+			FROM (
+				SELECT o.period_end, o.value FROM insight_evidence ie JOIN observations o ON o.id=ie.observation_id
+				WHERE ie.insight_id=i.id AND o.metric_id=i.metric_id
+				ORDER BY o.period_end DESC LIMIT 10
+			) history
+		), '[]') AS spark
+	FROM insights i JOIN entities e ON e.id=i.entity_id JOIN metrics m ON m.id=i.metric_id
+`
+
+func (s server) insights(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query()
+	category, entity := q.Get("category"), strings.ToUpper(q.Get("entity_id"))
+	limit, offset, ok := pagination(q)
+	switch category {
+	case "", "growth", "profitability", "cash_flow", "financial_health", "valuation":
+	default:
+		ok = false
+	}
+	if !ok || len(entity) > 80 {
+		fail(w, 400, "invalid_query", "分类、公司或分页参数无效")
+		return
+	}
+	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY rule_id, symbol, id), '[]') FROM (`+insightProjection+`
+		WHERE ($1 = '' OR i.category=$1) AND ($2 = '' OR i.entity_id=$2)
+		ORDER BY rule_id, symbol, i.id LIMIT $3 OFFSET $4
+	) t`, category, entity, limit, offset)
+}
+
+func (s server) insight(w http.ResponseWriter, r *http.Request) {
+	s.query(w, r, `SELECT to_jsonb(t) FROM (`+insightProjection+` WHERE i.id=$1) t`, r.PathValue("id"))
+}
+
+func (s server) evidence(w http.ResponseWriter, r *http.Request) {
+	s.query(w, r, `SELECT CASE WHEN EXISTS (SELECT 1 FROM insights WHERE id=$1) THEN
+		coalesce((SELECT jsonb_agg(to_jsonb(t) ORDER BY period_end, metric_id) FROM (`+observationProjection+`
+		JOIN insight_evidence ie ON ie.observation_id=o.id WHERE ie.insight_id=$1
+	) t), '[]') END`, r.PathValue("id"))
+}
+
+func (s server) overview(w http.ResponseWriter, r *http.Request) {
+	s.query(w, r, `SELECT jsonb_build_object(
+		'company_count', (SELECT count(*) FROM entities WHERE kind='stock'),
+		'insight_count', (SELECT count(*) FROM insights),
+		'latest_period', (SELECT max(period_end) FROM observations),
+		'last_updated_at', (SELECT max(available_at) FROM observations),
+		'market_count', (SELECT count(DISTINCT market) FROM entities WHERE kind='stock'),
+		'data_kind', 'mock'
+	)`)
+}
+
+func (s server) health(w http.ResponseWriter, r *http.Request) {
+	ctx, cancel := context.WithTimeout(r.Context(), 3*time.Second)
+	defer cancel()
+	var ready bool
+	err := s.db.QueryRow(ctx, `SELECT EXISTS (SELECT 1 FROM data_ingestion_runs WHERE status='success')
+		AND EXISTS (SELECT 1 FROM observations)`).Scan(&ready)
+	if err != nil || !ready {
+		fail(w, 503, "not_ready", "数据库或 Mock 数据尚未就绪")
+		return
+	}
+	send(w, 200, envelope{Data: map[string]string{"status": "ok", "database": "postgresql", "data_kind": "mock"}})
+}
+
+func (s server) routes(web http.Handler) http.Handler {
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /api/v1/health", s.health)
+	mux.HandleFunc("GET /api/v1/overview", s.overview)
+	mux.HandleFunc("GET /api/v1/entities", s.entities)
+	mux.HandleFunc("GET /api/v1/entities/{id}", s.entity)
+	mux.HandleFunc("GET /api/v1/metrics", s.metrics)
+	mux.HandleFunc("GET /api/v1/series", s.series)
+	mux.HandleFunc("GET /api/v1/insights", s.insights)
+	mux.HandleFunc("GET /api/v1/insights/{id}", s.insight)
+	mux.HandleFunc("GET /api/v1/insights/{id}/evidence", s.evidence)
+	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
+		if r.Method != http.MethodGet && r.Method != http.MethodHead {
+			w.Header().Set("Allow", "GET, HEAD")
+			fail(w, 405, "method_not_allowed", "接口仅支持读取")
+			return
+		}
+		fail(w, 404, "not_found", "没有找到对应的接口")
+	})
+	if web != nil {
+		mux.Handle("/", web)
+	}
+	return mux
+}
+
+func main() {
+	dsn := os.Getenv("DATABASE_URL")
+	if dsn == "" {
+		log.Fatal("DATABASE_URL is required")
+	}
+	ctx := context.Background()
+	pool, err := pgxpool.New(ctx, dsn)
+	if err != nil {
+		log.Fatal("could not configure PostgreSQL connection")
+	}
+	defer pool.Close()
+
+	var web http.Handler
+	if origin := os.Getenv("WEB_ORIGIN"); origin != "" {
+		target, err := url.Parse(origin)
+		if err != nil || (target.Scheme != "http" && target.Scheme != "https") || target.Host == "" {
+			log.Fatal("WEB_ORIGIN must be an absolute HTTP URL")
+		}
+		proxy := httputil.NewSingleHostReverseProxy(target)
+		proxy.ErrorHandler = func(w http.ResponseWriter, r *http.Request, err error) {
+			log.Printf("web upstream: %v", err)
+			http.Error(w, "Frontend temporarily unavailable", http.StatusBadGateway)
+		}
+		web = proxy
+	}
+
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	app := &http.Server{
+		Addr: ":" + port, Handler: (server{db: pool}).routes(web),
+		ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second,
+	}
+	log.Printf("Trends listening on port %s", port)
+	log.Fatal(app.ListenAndServe())
+}
