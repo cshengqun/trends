@@ -1,0 +1,33 @@
+services:
+  app:
+    image: trends-app:${TRENDS_RELEASE:-latest}
+    build:
+      context: .
+      args:
+        TRENDS_BASE_PATH: /trends
+        NODE_IMAGE: ${TRENDS_NODE_IMAGE:-node:24-bookworm-slim}
+        GO_IMAGE: ${TRENDS_GO_IMAGE:-golang:1.24-bookworm}
+        GO_PROXY: ${TRENDS_GO_PROXY:-https://proxy.golang.org,direct}
+    restart: unless-stopped
+    env_file:
+      - ${TRENDS_ENV_FILE:-.env}
+    ports:
+      - "127.0.0.1:18180:8080"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/trends/api/v1/health').then(r => process.exit(r.ok ? 0 : 1), () => process.exit(1))"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 45s
+    networks:
+      - postgres
+    logging:
+      driver: json-file
+      options:
+        max-size: 10m
+        max-file: "3"
+
+networks:
+  postgres:
+    external: true
+    name: ${TRENDS_PG_NETWORK:-twin_default}

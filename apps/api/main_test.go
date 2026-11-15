@@ -11,7 +11,6 @@ func TestQueryValidationAndRouting(t *testing.T) {
 	web := http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		w.WriteHeader(http.StatusNoContent)
 	})
-	handler := (server{}).routes(web)
 	for _, tc := range []struct {
 		method string
 		path   string
@@ -29,18 +28,21 @@ func TestQueryValidationAndRouting(t *testing.T) {
 		{"GET", "/api/v1/missing", 404, "not_found"},
 		{"POST", "/api/v1/entities", 405, "method_not_allowed"},
 	} {
-		t.Run(tc.method+" "+tc.path, func(t *testing.T) {
-			response := httptest.NewRecorder()
-			handler.ServeHTTP(response, httptest.NewRequest(tc.method, tc.path, nil))
-			if response.Code != tc.status {
-				t.Fatalf("status = %d, want %d", response.Code, tc.status)
-			}
-			if tc.code != "" {
-				var body envelope
-				if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil || body.Error == nil || body.Error.Code != tc.code {
-					t.Fatalf("unexpected error payload: %s", response.Body.String())
+		for _, basePath := range []string{"", "/trends"} {
+			path := basePath + tc.path
+			t.Run(tc.method+" "+path, func(t *testing.T) {
+				response := httptest.NewRecorder()
+				(server{}).routes(web, basePath).ServeHTTP(response, httptest.NewRequest(tc.method, path, nil))
+				if response.Code != tc.status {
+					t.Fatalf("status = %d, want %d", response.Code, tc.status)
 				}
-			}
-		})
+				if tc.code != "" {
+					var body envelope
+					if err := json.Unmarshal(response.Body.Bytes(), &body); err != nil || body.Error == nil || body.Error.Code != tc.code {
+						t.Fatalf("unexpected error payload: %s", response.Body.String())
+					}
+				}
+			})
+		}
 	}
 }

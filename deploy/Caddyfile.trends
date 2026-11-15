@@ -1,0 +1,5 @@
+# Import within the existing HTTPS site block.
+@trends path /trends /trends/*
+handle @trends {
+    reverse_proxy 127.0.0.1:18180
+}

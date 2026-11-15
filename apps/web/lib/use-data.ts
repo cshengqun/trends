@@ -7,6 +7,8 @@ type Result<T> =
   | { status: "error"; message: string }
   | { status: "success"; data: T };
 
+const apiBase = (process.env.NEXT_PUBLIC_BASE_PATH || "") + "/api/v1";
+
 export function useData<T>(path: string | null) {
   const [attempt, setAttempt] = useState(0);
   const [request, setRequest] = useState<{ key: string; result: Result<T> }>();
@@ -16,7 +18,7 @@ export function useData<T>(path: string | null) {
     const controller = new AbortController();
     async function load() {
       try {
-        const response = await fetch("/api/v1" + path, { signal: controller.signal, cache: "no-store" });
+        const response = await fetch(apiBase + path, { signal: controller.signal, cache: "no-store" });
         const payload = await response.json();
         if (!response.ok) throw new Error(payload.error?.message ?? "数据加载失败");
         if (!controller.signal.aborted) setRequest({ key, result: { status: "success", data: payload.data } });

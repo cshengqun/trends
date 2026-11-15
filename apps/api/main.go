@@ -218,18 +218,19 @@ func (s server) health(w http.ResponseWriter, r *http.Request) {
 	send(w, 200, envelope{Data: map[string]string{"status": "ok", "database": "postgresql", "data_kind": "mock"}})
 }
 
-func (s server) routes(web http.Handler) http.Handler {
+func (s server) routes(web http.Handler, basePath string) http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("GET /api/v1/health", s.health)
-	mux.HandleFunc("GET /api/v1/overview", s.overview)
-	mux.HandleFunc("GET /api/v1/entities", s.entities)
-	mux.HandleFunc("GET /api/v1/entities/{id}", s.entity)
-	mux.HandleFunc("GET /api/v1/metrics", s.metrics)
-	mux.HandleFunc("GET /api/v1/series", s.series)
-	mux.HandleFunc("GET /api/v1/insights", s.insights)
-	mux.HandleFunc("GET /api/v1/insights/{id}", s.insight)
-	mux.HandleFunc("GET /api/v1/insights/{id}/evidence", s.evidence)
-	mux.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
+	api := basePath + "/api"
+	mux.HandleFunc("GET "+api+"/v1/health", s.health)
+	mux.HandleFunc("GET "+api+"/v1/overview", s.overview)
+	mux.HandleFunc("GET "+api+"/v1/entities", s.entities)
+	mux.HandleFunc("GET "+api+"/v1/entities/{id}", s.entity)
+	mux.HandleFunc("GET "+api+"/v1/metrics", s.metrics)
+	mux.HandleFunc("GET "+api+"/v1/series", s.series)
+	mux.HandleFunc("GET "+api+"/v1/insights", s.insights)
+	mux.HandleFunc("GET "+api+"/v1/insights/{id}", s.insight)
+	mux.HandleFunc("GET "+api+"/v1/insights/{id}/evidence", s.evidence)
+	mux.HandleFunc(api+"/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodGet && r.Method != http.MethodHead {
 			w.Header().Set("Allow", "GET, HEAD")
 			fail(w, 405, "method_not_allowed", "接口仅支持读取")
@@ -274,7 +275,7 @@ func main() {
 		port = "8080"
 	}
 	app := &http.Server{
-		Addr: ":" + port, Handler: (server{db: pool}).routes(web),
+		Addr: ":" + port, Handler: (server{db: pool}).routes(web, os.Getenv("NEXT_PUBLIC_BASE_PATH")),
 		ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second,
 	}
 	log.Printf("Trends listening on port %s", port)

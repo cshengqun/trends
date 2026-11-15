@@ -8,7 +8,24 @@ Trends 是面向 A 股与港股公司基本面的趋势研究工作台。首轮�
 
 观测记录保留期间、数据可用时间、币种、版本和来源。洞察引用确切的观测记录，可回看计算所用的数据。数据库在独立服务运行，Web 与 API 同容器便于首轮部署。
 
-## 云端部署
+## 云服务器部署
+
+线上入口为 `https://iamcsq.top/trends`。VPS 部署复用服务器上的 PostgreSQL 16 和 Caddy。应用使用独立的 PostgreSQL 数据库及登录角色，通过已有的 Docker 私有网络连接数据库。Compose 只将应用端口 18180 绑定到服务器回环地址，由 Caddy 提供 HTTPS。
+
+1. 在现有 PostgreSQL 上创建应用专用数据库和普通登录角色。将连接串写入服务器上的环境文件，文件权限设为 `0600`，用 `TRENDS_ENV_FILE` 指向它。
+2. 把 Git 提交对应的源码放到服务器，设置 `TRENDS_RELEASE` 为提交号并构建启动。若 PostgreSQL 位于不同 Docker 网络，设置 `TRENDS_PG_NETWORK`。
+
+```sh
+docker compose -p trends -f compose.vps.yml up --build -d
+curl -fsS http://127.0.0.1:18180/trends/api/v1/health
+```
+
+3. 在 Caddy 的 HTTPS 站点块内导入 `deploy/Caddyfile.trends`，用 `caddy validate` 校验后重载。访问 `/trends`，再用下文的 Playwright 脚本验收。
+4. 后续发布使用新的源码目录和 `TRENDS_RELEASE`，运行同一条 Compose 命令。回滚时选择上一版源码和镜像标签，保留数据库。
+
+镜像构建默认使用 Docker Hub 和 Go 官方模块代理。如服务器访问受限，可通过 `TRENDS_NODE_IMAGE`、`TRENDS_GO_IMAGE` 和 `TRENDS_GO_PROXY` 指定可达的来源。
+
+### Render 部署备选
 
 `render.yaml` 配置一个 Docker Web Service 和同区域的 PostgreSQL 17。它使用 Render 免费档作为短期 Mock 验收环境，免费数据库创建 30 天后到期。数据库外网访问关闭，连接地址通过服务环境变量注入。 [Render 免费档说明](https://render.com/docs/free)
 
