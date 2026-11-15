@@ -25,6 +25,8 @@ curl -fsS http://127.0.0.1:18180/trends/api/v1/health
 
 镜像构建默认使用 Docker Hub、Go 官方模块代理、npm 官方 registry 和 Debian 软件源。如服务器访问受限，可通过 `TRENDS_NODE_IMAGE`、`TRENDS_GO_IMAGE`、`TRENDS_GO_PROXY`、`TRENDS_NPM_REGISTRY` 和 `TRENDS_DEBIAN_MIRROR` 指定可达的来源。当前服务器的构建参数保存在 `/opt/trends/shared/build.env`，可通过 Compose 的 `--env-file` 选项复用。
 
+网络受限时，可在发布目录的 `deploy/.build-cache/npm` 放入用锁文件预取的 npm 缓存，在 `deploy/.build-cache/wheels` 放入 Linux amd64 / CPython 3.11 的 PostgreSQL 客户端依赖包。构建会使用可用的缓存离线安装，缓存目录不进入 Git 或最终镜像。
+
 ### Render 部署备选
 
 `render.yaml` 配置一个 Docker Web Service 和同区域的 PostgreSQL 17。它使用 Render 免费档作为短期 Mock 验收环境，免费数据库创建 30 天后到期。数据库外网访问关闭，连接地址通过服务环境变量注入。 [Render 免费档说明](https://render.com/docs/free)

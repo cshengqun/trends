@@ -7,7 +7,14 @@ ARG NPM_REGISTRY=https://registry.npmjs.org
 WORKDIR /build
 ENV NEXT_TELEMETRY_DISABLED=1 NEXT_PUBLIC_BASE_PATH=${TRENDS_BASE_PATH}
 COPY apps/web/package.json apps/web/package-lock.json ./
-RUN npm ci --registry="$NPM_REGISTRY" --no-audit --no-fund
+RUN --mount=type=bind,source=deploy,target=/build-input \
+    if [ -d /build-input/.build-cache/npm ]; then \
+      cp -a /build-input/.build-cache/npm /tmp/trends-npm-cache \
+      && npm ci --offline --cache /tmp/trends-npm-cache --no-audit --no-fund \
+      && rm -rf /tmp/trends-npm-cache; \
+    else \
+      npm ci --registry="$NPM_REGISTRY" --no-audit --no-fund; \
+    fi
 COPY apps/web/ ./
 RUN npm run build
 
@@ -30,7 +37,13 @@ RUN if [ -n "$DEBIAN_MIRROR" ]; then \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY services/data-pipeline/requirements.txt /tmp/requirements.txt
-RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt
+RUN --mount=type=bind,source=deploy,target=/build-input \
+    python3 -m venv /opt/venv \
+    && if [ -d /build-input/.build-cache/wheels ]; then \
+      /opt/venv/bin/pip install --no-index --find-links=/build-input/.build-cache/wheels -r /tmp/requirements.txt; \
+    else \
+      /opt/venv/bin/pip install --no-cache-dir -r /tmp/requirements.txt; \
+    fi
 COPY --from=web /build/.next/standalone/ ./web/
 COPY --from=web /build/.next/static/ ./web/.next/static/
 COPY --from=api /out/trends-api /usr/local/bin/trends-api
