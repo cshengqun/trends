@@ -63,6 +63,10 @@ def load_snapshot(path=SNAPSHOT):
         published = date.fromisoformat(filing["published"])
         if symbol not in companies or url.scheme != "https" or not url.hostname or not filing["label"]:
             raise ValueError(f"Invalid filing {symbol}")
+        for support in filing.get("supporting_documents", []):
+            supporting_url = urlsplit(support["url"])
+            if supporting_url.scheme != "https" or not supporting_url.hostname or not support["label"]:
+                raise ValueError(f"Invalid supporting document {symbol}")
         for row in filing["rows"]:
             freq = row["period"]
             end = date.fromisoformat(row["end"])

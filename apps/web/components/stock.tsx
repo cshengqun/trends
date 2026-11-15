@@ -12,7 +12,7 @@ import { useData } from "@/lib/use-data";
 export function Stock({ symbol }: { symbol: string }) {
   const [metric, setMetric] = useState("revenue");
   const [chosenPeriod, setPeriod] = useState<Period>();
-  const [range, setRange] = useState(5);
+  const [range, setRange] = useState(2);
   const [mode, setMode] = useState<"line" | "bar">("line");
   const entity = useData<EntityDetail>("/entities/" + encodeURIComponent(symbol));
   const definitions = useData<Metric[]>("/metrics");
@@ -24,8 +24,8 @@ export function Stock({ symbol }: { symbol: string }) {
   const insights = useData<Insight[]>(entity.status === "success" ? "/insights?entity_id=" + encodeURIComponent(symbol) : null);
   const all = series.status === "success" ? series.data : [];
   const latest = all.at(-1);
-  const cutoff = latest && range ? Number(latest.period_end.slice(0, 4)) - range + 1 : 0;
-  const points = all.filter((point) => Number(point.period_end.slice(0, 4)) >= cutoff);
+  const cutoff = latest && range ? (Number(latest.period_end.slice(0, 4)) - range) + latest.period_end.slice(4) : "";
+  const points = all.filter((point) => point.period_end > cutoff);
   const selected = definitions.status === "success" ? definitions.data.find((item) => item.id === metric) : undefined;
   const unit = metricUnit(latest?.unit ?? selected?.unit ?? "", latest?.currency);
   const filings = [...new Map([...points].reverse().map((point) => [point.source_id, point])).values()];
@@ -62,7 +62,7 @@ export function Stock({ symbol }: { symbol: string }) {
           </div>
           <div className="row gap">
             <div className="tabs" aria-label="历史范围">
-              {[3, 5, 10, 0].map((years) => <button key={years} className={range === years ? "selected" : ""} onClick={() => setRange(years)} aria-pressed={range === years}>{years ? years + " 年" : "全部"}</button>)}
+              {[2, 3, 5, 10, 0].map((years) => <button key={years} className={range === years ? "selected" : ""} onClick={() => setRange(years)} aria-pressed={range === years}>{years ? years + " 年" : "全部"}</button>)}
             </div>
             <div className="tabs" aria-label="图表类型">
               <button aria-label="折线图" aria-pressed={mode === "line"} onClick={() => setMode("line")} className={mode === "line" ? "selected" : ""}><LineChart size={16} /></button>
@@ -96,6 +96,7 @@ export function Stock({ symbol }: { symbol: string }) {
         {latest ? filings.map((source) => <div key={source.source_id} className="panel source-card"><Database size={19} /><div>
           <strong>{source.source_kind === "official" ? <a className="text-link" href={source.document_ref} target="_blank" rel="noreferrer">{source.source_label}</a> : source.source_label}</strong>
           <p>{source.published_at ? "披露 " + displayDate(source.published_at) : "计算版本 " + source.calculation_version}</p>
+          {source.supporting_documents?.map((doc) => <p key={doc.url}><a className="text-link" href={doc.url} target="_blank" rel="noreferrer">计算依据 · {doc.label}</a></p>)}
           {source.source_kind === "mock" && <code>{source.document_ref}</code>}
         </div><DataLabel kind={source.source_kind === "official" ? "official" : "mock"} /></div>) :
           series.status === "loading" ? <State type="loading" /> :

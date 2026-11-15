@@ -148,7 +148,8 @@ const observationProjection = `
 	SELECT o.id, o.entity_id, o.metric_id, m.name AS metric_name, o.period_start, o.period_end,
 	       o.period_type, o.published_at, o.available_at, o.value, o.currency, o.unit, o.source_id,
 	       o.calculation_version, o.quality_status, o.revision, s.kind AS source_kind,
-	       s.label AS source_label, s.document_ref
+	       s.label AS source_label, s.document_ref,
+	       coalesce(s.raw_payload->'supporting_documents', '[]'::jsonb) AS supporting_documents
 	FROM observations o JOIN sources s ON s.id=o.source_id JOIN metrics m ON m.id=o.metric_id
 `
 

@@ -771,6 +771,1350 @@
           }
         }
       ]
+    },
+    {
+      "symbol": "000333.SZ",
+      "published": "2025-03-29",
+      "label": "美的集团 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-29/1222951181.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "88174939",
+            "net_income": "6838123"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "000333.SZ",
+      "published": "2026-03-31",
+      "label": "美的集团 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "127838538",
+            "net_income": "12422233"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "123285176",
+            "net_income": "13591457"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "93394980",
+            "net_income": "6062028"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "000333.SZ",
+      "published": "2026-04-30",
+      "label": "美的集团 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "131098601",
+            "net_income": "12674556"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "000333.SZ",
+      "published": "2026-08-29",
+      "label": "美的集团 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225531404.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "128943889",
+            "net_income": "13771481"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "2026年一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259066.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "002371.SZ",
+      "published": "2025-04-26",
+      "label": "北方华创 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-04-26/1223309278.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "9485298203.09",
+            "net_income": "1158667747.47"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "002371.SZ",
+      "published": "2026-04-18",
+      "label": "北方华创 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-18/1225122918.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "8206029208.83",
+            "net_income": "1580707286.38"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "7935516975.91",
+            "net_income": "1627271237.20"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "12051732762.97",
+            "net_income": "391650402.16"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "002371.SZ",
+      "published": "2026-04-30",
+      "label": "北方华创 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259650.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "10322863908.82",
+            "net_income": "1634739048.68"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "002371.SZ",
+      "published": "2026-08-26",
+      "label": "北方华创 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-26/1225501903.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "9838552981.74",
+            "net_income": "1735281628.07"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "2026年一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259650.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "300750.SZ",
+      "published": "2025-03-15",
+      "label": "宁德时代 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-15/1222806982.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "102967805",
+            "net_income": "14743608"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300750.SZ",
+      "published": "2026-03-10",
+      "label": "宁德时代 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "84704589",
+            "net_income": "13962558"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "94181664",
+            "net_income": "16522581"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "net_income": "18548970"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "140629847",
+            "net_income": "23167173"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300750.SZ",
+      "published": "2026-04-16",
+      "label": "宁德时代 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "129131041",
+            "net_income": "20737710"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300750.SZ",
+      "published": "2026-07-25",
+      "label": "宁德时代 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-07-25/1225441586.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "thousand",
+          "values": {
+            "revenue": "147785539",
+            "net_income": "22546292"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "2026年一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-16/1225107946.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "300866.SZ",
+      "published": "2025-04-29",
+      "label": "安克创新 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-04-29/1223379891.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "8261425483.84",
+            "net_income": "642867884.52"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300866.SZ",
+      "published": "2026-04-10",
+      "label": "安克创新 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-10/1225090973.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "5993381106.11",
+            "net_income": "495761205.29"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "6873381673.37",
+            "net_income": "671155667.51"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "9495170061.57",
+            "net_income": "612357610.69"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300866.SZ",
+      "published": "2026-04-30",
+      "label": "安克创新 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225260221.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "7607645545.67",
+            "net_income": "471594189.71"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "300866.SZ",
+      "published": "2026-08-31",
+      "label": "安克创新 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-31/1225533054.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "8997363207.75",
+            "net_income": "1230443025.68"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "2026年一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225260221.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "600036.SH",
+      "published": "2025-03-26",
+      "label": "招商银行 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-26/1222895154.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "84779",
+            "net_income": "35207"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600036.SH",
+      "published": "2026-03-28",
+      "label": "招商银行 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225047590.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "83751",
+            "net_income": "37286"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "86218",
+            "net_income": "37644"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "86112",
+            "net_income": "36409"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600036.SH",
+      "published": "2026-04-29",
+      "label": "招商银行 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "86940",
+            "net_income": "37852"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600036.SH",
+      "published": "2026-08-29",
+      "label": "招商银行 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-29/1225530237.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "91241",
+            "net_income": "38593"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "招商银行股份有限公司2026年第一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225231394.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "600887.SH",
+      "published": "2025-04-30",
+      "label": "伊利股份 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-04-30/1223421123.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "26660376531.26",
+            "net_income": "-2415620352.16"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600887.SH",
+      "published": "2026-04-30",
+      "label": "伊利股份 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259562.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "32938299808.43",
+            "net_income": "4874104242.93"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "28838446874.25",
+            "net_income": "2326373368.98"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "28563801435.51",
+            "net_income": "3225625005.13"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "25295683131.86",
+            "net_income": "1139063880.77"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600887.SH",
+      "published": "2026-04-30",
+      "label": "伊利股份 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259609.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "34741223880.93",
+            "net_income": "5394651297.16"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600887.SH",
+      "published": "2026-08-27",
+      "label": "伊利股份 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225511409.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "29589712666.45",
+            "net_income": "363976800.63"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "内蒙古伊利实业集团股份有限公司2026年第一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259609.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "600900.SH",
+      "published": "2025-04-30",
+      "label": "长江电力 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-04-30/1223421172.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "18161189820.97",
+            "net_income": "4471249595.83"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600900.SH",
+      "published": "2026-04-30",
+      "label": "长江电力 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "17015283778.59",
+            "net_income": "5180785597.87"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "19682330288.13",
+            "net_income": "7875566875.68"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "20500654540.48",
+            "net_income": "6309934681.44"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600900.SH",
+      "published": "2026-04-30",
+      "label": "长江电力 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "18111540767.50",
+            "net_income": "6761006898.48"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600900.SH",
+      "published": "2026-08-31",
+      "label": "长江电力 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-31/1225534923.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "19817728159.68",
+            "net_income": "7994687876.05"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "长江电力2026年一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262110.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "600938.SH",
+      "published": "2025-03-28",
+      "label": "中国海油 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-28/1222929636.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "94482",
+            "net_income": "21277"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600938.SH",
+      "published": "2026-03-27",
+      "label": "中国海油 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225036017.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "106854",
+            "net_income": "36563"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "100754",
+            "net_income": "32970"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "net_income": "32438"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "85717",
+            "net_income": "20111"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600938.SH",
+      "published": "2026-04-29",
+      "label": "中国海油 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225232633.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "116079",
+            "net_income": "39144"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600938.SH",
+      "published": "2026-08-27",
+      "label": "中国海油 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-27/1225513023.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "126581",
+            "net_income": "46674"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "中国海洋石油有限公司2026年第一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225232633.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "600941.SH",
+      "published": "2025-03-21",
+      "label": "中国移动 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-21/1222856315.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "249301",
+            "net_income": "27492"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600941.SH",
+      "published": "2026-03-27",
+      "label": "中国移动 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225036280.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "263760",
+            "net_income": "30631"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "280009",
+            "net_income": "53604"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "255521",
+            "net_income": "21742"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600941.SH",
+      "published": "2026-04-21",
+      "label": "中国移动 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-21/1225131150.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "266478",
+            "net_income": "29342"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "600941.SH",
+      "published": "2026-08-14",
+      "label": "中国移动 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-14/1225472195.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "271557",
+            "net_income": "49592"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "中国移动：2026年第一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-21/1225131150.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "601318.SH",
+      "published": "2025-03-20",
+      "label": "中国平安 2024 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2025-03-20/1222847447.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "253542",
+            "net_income": "7425"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "601318.SH",
+      "published": "2026-03-27",
+      "label": "中国平安 2025 年年报 · 分季度数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225038263.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "232801",
+            "net_income": "27016"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "267275",
+            "net_income": "41031"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "217566",
+            "net_income": "1922"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "601318.SH",
+      "published": "2026-04-29",
+      "label": "中国平安 2026 年第一季度报告 · 合并数据",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225235613.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "218405",
+            "net_income": "25022"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "601318.SH",
+      "published": "2026-08-21",
+      "label": "中国平安 2026 年中期报告 · 上半年累计减一季度",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-08-21/1225487480.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-06-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "356733",
+            "net_income": "67563"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "中国平安2026年第一季度报告",
+          "url": "https://static.cninfo.com.cn/finalpage/2026-04-29/1225235613.PDF"
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2026-05-13",
+      "label": "腾讯 2026 年第一季度业绩公告 · 同期对照",
+      "url": "https://static.www.tencent.com/uploads/2026/05/13/59cf8219adbb046153f69387479350ac.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "180022",
+            "net_income": "47821"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2025-11-13",
+      "label": "腾讯 2025 年第三季度业绩公告 · 合并损益",
+      "url": "https://static.www.tencent.com/uploads/2025/11/13/e63656944030f90a5e4c8f1718d8bdd6.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "167193",
+            "net_income": "53230"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "192869",
+            "net_income": "63133"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "0700.HK",
+      "published": "2026-03-18",
+      "label": "腾讯 2025 年第四季度及年度业绩公告 · 单季",
+      "url": "https://static.www.tencent.com/uploads/2026/03/18/f78591955e05a6db4e31e128bdaefefa.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "172446",
+            "net_income": "51324"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "194371",
+            "net_income": "58260"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2026-05-13",
+      "label": "阿里巴巴 2026 年 3 月季度业绩 · 合并损益",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/5b1cb883-8d00-4237-a148-6631cc12a5d2/Alibaba%20Group%20Announces%20March%20Quarter%202026%20and%20Fiscal%20Year%202026%20Results.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "236454",
+            "net_income": "12559"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "243380",
+            "net_income": "25541"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2025-11-25",
+      "label": "阿里巴巴 2025 年 9 月季度业绩 · 合并损益",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/96ebbe16-9309-479f-b628-48b0ccc31b9c/Alibaba%20Group%20Announces%20September%20Quarter%202025%20Results%20and%20Interim%20Results%20for%20the%20Six%20Months%20Ended%20September%2030%2C%202025.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "236503",
+            "net_income": "44033"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "247795",
+            "net_income": "21019"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "9988.HK",
+      "published": "2026-03-19",
+      "label": "阿里巴巴 2025 年 12 月季度业绩 · 合并损益",
+      "url": "https://data.alibabagroup.com/ecms-files/1532295521/e48e70a1-e5c8-40ac-bdd2-951ebcb36946/Alibaba%20Group%20Announces%20December%20Quarter%202025%20Results.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "280154",
+            "net_income": "49127"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "284843",
+            "net_income": "16383"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2026-05-26",
+      "label": "小米集团 2026 年第一季度业绩公告 · 合并损益",
+      "url": "https://ir.mi.com/static-files/098acc43-1b58-4d1b-b375-9ea25f35477b",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "111293.337",
+            "net_income": "10924.321"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "net_income": "4723.120"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2025-11-18",
+      "label": "小米集团 2025 年第三季度业绩公告 · 合并损益",
+      "url": "https://ir.mi.com/static-files/1e19fb17-dc12-4803-8426-376008c467a9",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "92506.5",
+            "net_income": "5352.404"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "113120.7",
+            "net_income": "12270.874"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "1810.HK",
+      "published": "2026-03-24",
+      "label": "小米集团 2025 年全年业绩公告 · 第四季度营收及全年减前三季度归母净利",
+      "url": "https://ir.mi.com/system/files-encrypted/nasdaq_kms/assets/2026/03/24/5-35-03/25Q4%20EN%20AC%20Xiaomi.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "109005.2",
+            "net_income": "9025.659"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "116916.5",
+            "net_income": "6543.789"
+          }
+        }
+      ],
+      "supporting_documents": [
+        {
+          "label": "小米集团 2025 年第三季度业绩公告 · 前三季度累计及同期对照",
+          "url": "https://ir.mi.com/static-files/1e19fb17-dc12-4803-8426-376008c467a9"
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2026-06-01",
+      "label": "美团 2026 年第一季度业绩公告 · 合并损益及重列同期",
+      "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0601/2026060101346.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "86206.145",
+            "net_income": "10056.827"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2026-03-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "91038.906",
+            "net_income": "-6827.414"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2026-03-26",
+      "label": "美团 2025 年全年业绩公告 · 第四季度及同期",
+      "url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0326/2026032600964.pdf",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "88487.296"
+          }
+        },
+        {
+          "period": "quarterly",
+          "end": "2025-12-31",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "92096.429",
+            "net_income": "-15144.205"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2024-11-29",
+      "label": "美团 2024 年第三季度业绩 · 公司公告",
+      "url": "https://www.meituan.com/news/NN241129066007115",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2024-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "93600"
+          }
+        }
+      ]
+    },
+    {
+      "symbol": "3690.HK",
+      "published": "2025-11-28",
+      "label": "美团 2025 年第三季度业绩 · 公司公告",
+      "url": "https://www.meituan.com/news/NN251128093005515",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2025-09-30",
+          "currency": "CNY",
+          "scale": "million",
+          "values": {
+            "revenue": "95500"
+          }
+        }
+      ]
     }
   ]
 }

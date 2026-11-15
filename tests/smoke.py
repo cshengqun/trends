@@ -72,6 +72,18 @@ def verify_disclosures_api():
     assert any(row["period_end"] == "2025-12-31" and row["currency"] == "USD" and row["value"] == 0.079038 for row in mini)
     tencent = api("/series", entity_id="0700.HK", metric_id="revenue", period="quarterly")
     assert any(row["period_start"] == "2026-04-01" and row["value"] == 204.785 for row in tencent)
+    domestic_quarters = {
+        "2024-12-31", "2025-03-31", "2025-06-30", "2025-09-30",
+        "2025-12-31", "2026-03-31", "2026-06-30", "2026-09-30",
+    }
+    hong_kong_quarters = domestic_quarters - {"2026-09-30"} | {"2024-09-30"}
+    for symbol in expected - {"0100.HK", "2513.HK", "9880.HK"}:
+        quarterly = api("/series", entity_id=symbol, metric_id="revenue", period="quarterly")
+        expected_quarters = hong_kong_quarters if symbol.endswith(".HK") else domestic_quarters
+        assert expected_quarters.issubset({row["period_end"] for row in quarterly}), symbol
+    midea = api("/series", entity_id="000333.SZ", metric_id="revenue", period="quarterly")
+    derived = next(row for row in midea if row["period_end"] == "2026-06-30")
+    assert derived["value"] == 128.943889 and derived["supporting_documents"][0]["url"].startswith("https://")
     mau = api("/series", entity_id="1810.HK", metric_id="global_mau", period="monthly")
     months = {row["period_end"]: row["value"] for row in mau}
     assert months.get("2025-12-31") == 754.1 and months.get("2026-06-30") == 766.5
@@ -101,6 +113,7 @@ def verify_browser(kind):
             search.fill("小米")
             page.get_by_role("link", name="小米集团", exact=False).first.click()
             expect(page.get_by_role("img", name="营业收入季度趋势图")).to_be_visible()
+            expect(page.get_by_role("button", name="2 年", exact=True)).to_have_attribute("aria-pressed", "true")
             page.get_by_role("button", name="年度", exact=True).click()
             expect(page.get_by_role("img", name="营业收入年度趋势图")).to_be_visible()
             page.get_by_label("财务指标").select_option("global_mau")
