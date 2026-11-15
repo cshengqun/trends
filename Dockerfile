@@ -3,10 +3,11 @@ ARG GO_IMAGE=golang:1.24-bookworm
 
 FROM ${NODE_IMAGE} AS web
 ARG TRENDS_BASE_PATH=
+ARG NPM_REGISTRY=https://registry.npmjs.org
 WORKDIR /build
 ENV NEXT_TELEMETRY_DISABLED=1 NEXT_PUBLIC_BASE_PATH=${TRENDS_BASE_PATH}
 COPY apps/web/package.json apps/web/package-lock.json ./
-RUN npm ci
+RUN npm ci --registry="$NPM_REGISTRY" --no-audit --no-fund
 COPY apps/web/ ./
 RUN npm run build
 
@@ -21,7 +22,11 @@ RUN CGO_ENABLED=0 go build -trimpath -o /out/trends-api .
 
 FROM ${NODE_IMAGE}
 ARG TRENDS_BASE_PATH=
-RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv tini ca-certificates \
+ARG DEBIAN_MIRROR=
+RUN if [ -n "$DEBIAN_MIRROR" ]; then \
+      sed -i "s|http://deb.debian.org|$DEBIAN_MIRROR|g" /etc/apt/sources.list.d/debian.sources; \
+    fi \
+    && apt-get update && apt-get install -y --no-install-recommends python3 python3-venv tini ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY services/data-pipeline/requirements.txt /tmp/requirements.txt

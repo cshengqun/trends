@@ -8,6 +8,8 @@ services:
         NODE_IMAGE: ${TRENDS_NODE_IMAGE:-node:24-bookworm-slim}
         GO_IMAGE: ${TRENDS_GO_IMAGE:-golang:1.24-bookworm}
         GO_PROXY: ${TRENDS_GO_PROXY:-https://proxy.golang.org,direct}
+        NPM_REGISTRY: ${TRENDS_NPM_REGISTRY:-https://registry.npmjs.org}
+        DEBIAN_MIRROR: ${TRENDS_DEBIAN_MIRROR:-}
     restart: unless-stopped
     env_file:
       - ${TRENDS_ENV_FILE:-.env}

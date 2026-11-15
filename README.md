@@ -23,7 +23,7 @@ curl -fsS http://127.0.0.1:18180/trends/api/v1/health
 3. 在 Caddy 的 HTTPS 站点块内导入 `deploy/Caddyfile.trends`，用 `caddy validate` 校验后重载。访问 `/trends`，再用下文的 Playwright 脚本验收。
 4. 后续发布使用新的源码目录和 `TRENDS_RELEASE`，运行同一条 Compose 命令。回滚时选择上一版源码和镜像标签，保留数据库。
 
-镜像构建默认使用 Docker Hub 和 Go 官方模块代理。如服务器访问受限，可通过 `TRENDS_NODE_IMAGE`、`TRENDS_GO_IMAGE` 和 `TRENDS_GO_PROXY` 指定可达的来源。
+镜像构建默认使用 Docker Hub、Go 官方模块代理、npm 官方 registry 和 Debian 软件源。如服务器访问受限，可通过 `TRENDS_NODE_IMAGE`、`TRENDS_GO_IMAGE`、`TRENDS_GO_PROXY`、`TRENDS_NPM_REGISTRY` 和 `TRENDS_DEBIAN_MIRROR` 指定可达的来源。当前服务器的构建参数保存在 `/opt/trends/shared/build.env`，可通过 Compose 的 `--env-file` 选项复用。
 
 ### Render 部署备选
 
