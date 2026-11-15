@@ -170,3 +170,5 @@ a { color: inherit; text-decoration: none; }
   .signal-grid { grid-template-columns: 1fr; }
   .section { margin-top: 25px; }
 }
+.official-label { color: var(--green); background: #16312c; border-color: #416758; }
+.official-label > span { background: var(--green); }

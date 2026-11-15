@@ -21,7 +21,7 @@ func TestQueryValidationAndRouting(t *testing.T) {
 		{"GET", "/stocks/0700.HK", 204, ""},
 		{"GET", "/api/v1/entities?limit=101", 400, "invalid_query"},
 		{"GET", "/api/v1/entities?market=US", 400, "invalid_query"},
-		{"GET", "/api/v1/series?entity_id=0700.HK&metric_id=revenue&period=monthly", 400, "invalid_query"},
+		{"GET", "/api/v1/series?entity_id=0700.HK&metric_id=revenue&period=daily", 400, "invalid_query"},
 		{"GET", "/api/v1/series", 400, "invalid_query"},
 		{"GET", "/api/v1/insights?offset=-1", 400, "invalid_query"},
 		{"GET", "/api/v1/insights?category=other", 400, "invalid_query"},

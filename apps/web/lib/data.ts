@@ -8,24 +8,29 @@ export type Metric = {
 };
 
 export type Point = { period_end: string; value: number };
-export type LatestMetric = Point & { metric_id: string; name: string; unit: string; currency: string };
-export type EntityDetail = Entity & { latest_metrics: LatestMetric[] };
+export const periods = ["monthly", "quarterly", "annual"] as const;
+export type Period = typeof periods[number];
+export const periodNames: Record<Period, string> = { monthly: "月度", quarterly: "季度", annual: "年度" };
+export type DataKind = "official" | "mock";
+export type LatestMetric = Point & { metric_id: string; name: string; unit: string; currency: string; period_type: Period };
+export type EntityDetail = Entity & { latest_metrics: LatestMetric[]; available_series: { metric_id: string; period_type: Period }[] };
 export type Observation = Point & {
   id: number; metric_name: string; metric_id: string; currency: string; unit: string;
   published_at: string | null; available_at: string; source_id: string; source_label: string;
   source_kind: string; document_ref: string; calculation_version: string; quality_status: string;
+  period_start: string; period_type: Period;
 };
 
 export type Insight = {
   id: string; entity_id: string; entity_name: string; symbol: string; category: string;
   rule_id: string; title: string; summary: string; metric_name: string; metric_id: string;
   delta: number; delta_unit: string; period_end: string; generated_at: string; data_updated_at: string | null;
-  data_kind: string; method: string; spark: Point[];
+  data_kind: DataKind; method: string; spark: Point[]; period_type: Period; metric_unit: string;
 };
 
 export type Overview = {
   company_count: number; insight_count: number; market_count: number;
-  latest_period: string | null; last_updated_at: string | null;
+  latest_period: string | null; last_updated_at: string | null; data_kind: DataKind;
 };
 
 export const categories = {
@@ -34,6 +39,7 @@ export const categories = {
   cash_flow: "现金流",
   financial_health: "财务健康",
   valuation: "估值",
+  operations: "经营数据",
 };
 
 export function categoryName(category: string) {
@@ -57,8 +63,16 @@ export function metricValue(value: number, unit: string) {
 }
 
 export function metricUnit(unit: string, currency = "CNY") {
-  if (unit === "billion") return "亿元 " + currency;
+  if (unit === "billion") return currency === "CNY" ? "亿元 CNY" : "亿 " + currency;
+  if (unit === "million_users") return "百万用户";
   return unit;
+}
+
+export function periodLabel(value: string, period: Period) {
+  const year = value.slice(0, 4);
+  if (period === "annual") return "FY " + year;
+  if (period === "quarterly") return year + " Q" + Math.ceil(Number(value.slice(5, 7)) / 3);
+  return value.slice(0, 7);
 }
 
 export function displayDate(value: string | null) {

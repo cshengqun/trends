@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { Chart } from "@/components/chart";
 import { CompanyTable, SignalCard, State } from "@/components/common";
-import { CompanySearch, MockLabel } from "@/components/shell";
-import { categories, deltaLabel, displayDate, type Entity, type Insight, type Observation, type Overview } from "@/lib/data";
+import { CompanySearch, DataLabel, useDataKind } from "@/components/shell";
+import { categories, deltaLabel, displayDate, periodNames, type Entity, type Insight, type Observation, type Overview } from "@/lib/data";
 import { useData } from "@/lib/use-data";
 
 export default function Discover() {
@@ -14,16 +14,19 @@ export default function Discover() {
   const overview = useData<Overview>("/overview");
   const companies = useData<Entity[]>("/entities");
   const signals = useData<Insight[]>("/insights?limit=6&category=" + category);
-  const featured = useData<Observation[]>("/series?entity_id=0700.HK&metric_id=revenue&period=annual");
+  const kind = useDataKind();
+  const featuredPeriod = kind === "official" ? "quarterly" : "annual";
+  const featured = useData<Observation[]>(kind ? "/series?entity_id=0700.HK&metric_id=revenue&period=" + featuredPeriod : null);
   const featuredPoints = featured.status === "success" ? featured.data.slice(-6) : [];
   const latest = featuredPoints.at(-1);
-  const prior = featuredPoints.at(-2);
+  const prior = latest && featuredPoints.find((point) => point.period_end.slice(5, 7) === latest.period_end.slice(5, 7) &&
+    Number(point.period_end.slice(0, 4)) === Number(latest.period_end.slice(0, 4)) - 1);
   const stats = overview.status === "success" ? overview.data : null;
   const metrics = [
     { label: "覆盖公司", value: stats?.company_count, suffix: "家", icon: Building2 },
     { label: "已发现趋势", value: stats?.insight_count, suffix: "条", icon: Activity },
     { label: "覆盖市场", value: stats?.market_count, suffix: "个", icon: Globe2 },
-    { label: "最新入库", value: stats ? displayDate(stats.last_updated_at) : undefined, suffix: "", icon: CalendarDays },
+    { label: kind === "official" ? "最近披露" : "最新入库", value: stats ? displayDate(stats.last_updated_at) : undefined, suffix: "", icon: CalendarDays },
   ];
   return <>
     <section className="hero panel">
@@ -34,14 +37,14 @@ export default function Discover() {
         <CompanySearch hero />
       </div>
       <div className="featured panel">
-        <div className="row between"><div className="eyebrow"><ChartNoAxesCombined size={16} /> 样本趋势</div><MockLabel /></div>
+        <div className="row between"><div className="eyebrow"><ChartNoAxesCombined size={16} /> 营收趋势</div><DataLabel /></div>
         <div className="featured-title"><Link href="/stocks/0700.HK">腾讯控股</Link><span className="mono">0700.HK</span></div>
-        <div className="row between featured-caption"><span>营业收入 · 亿元 CNY</span>
+        <div className="row between featured-caption"><span>营业收入 · {periodNames[featuredPeriod]} · 亿元 CNY</span>
           {latest && prior && <span className="up mono">{deltaLabel((latest.value / prior.value - 1) * 100, "%")} 同比</span>}
         </div>
         {featured.status === "error" ? <State type="error" message={featured.message} retry={featured.retry} /> :
           featured.status === "loading" ? <State type="loading" /> :
-            featuredPoints.length ? <Chart points={featuredPoints} unit="billion" label="营业收入" axisUnit="亿元 CNY" size="hero" /> : <State type="empty" />}
+            featuredPoints.length ? <Chart points={featuredPoints} unit="billion" label="营业收入" axisUnit="亿元 CNY" size="hero" period={featuredPeriod} /> : <State type="empty" />}
       </div>
     </section>
 
@@ -63,7 +66,7 @@ export default function Discover() {
           <div className="signal-grid">{signals.data.map((signal) => <SignalCard insight={signal} key={signal.id} />)}</div>}
     </section>
     <section className="section">
-      <div className="section-title"><div><h2>覆盖公司</h2><p>探索 A 股与港股公司的年度财务样本</p></div><Link className="text-link" href="/stocks">查看全部 <ArrowRight size={16} /></Link></div>
+      <div className="section-title"><div><h2>覆盖公司</h2><p>探索 A 股与港股公司的财务与经营数据</p></div><Link className="text-link" href="/stocks">查看全部 <ArrowRight size={16} /></Link></div>
       {companies.status === "loading" ? <State type="loading" /> : companies.status === "error" ?
         <State type="error" message={companies.message} retry={companies.retry} /> : <CompanyTable companies={companies.data} />}
     </section>

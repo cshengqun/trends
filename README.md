@@ -1,6 +1,6 @@
 # Trends
 
-Trends 是面向 A 股与港股公司基本面的趋势研究工作台。首轮样本覆盖 6 家公司、2016–2025 年、10 项年度指标。所有财务数值来自自建 Mock 样本，并在页面和数据接口标识。样本公司名称和股票代码用于演示查找流程。
+Trends 是面向 A 股与港股公司基本面的趋势研究工作台。火山云线上站点覆盖 17 家公司，首批真实数据来自经过核对的发行人公开披露。开发环境默认另用 Mock 样本，两种数据模式分开查询和标识。
 
 ## 架构
 
@@ -12,7 +12,7 @@ Trends 是面向 A 股与港股公司基本面的趋势研究工作台。首轮�
 
 线上入口为 `https://iamcsq.top/trends`。VPS 部署复用服务器上的 PostgreSQL 16 和 Caddy。应用使用独立的 PostgreSQL 数据库及登录角色，通过已有的 Docker 私有网络连接数据库。Compose 只将应用端口 18180 绑定到服务器回环地址，由 Caddy 提供 HTTPS。
 
-1. 在现有 PostgreSQL 上创建应用专用数据库和普通登录角色。将连接串写入服务器上的环境文件，文件权限设为 `0600`，用 `TRENDS_ENV_FILE` 指向它。
+1. 在现有 PostgreSQL 上创建应用专用数据库和普通登录角色。将连接串写入服务器上的环境文件，文件权限设为 `0600`；真实披露库同时设置 `TRENDS_DATA_MODE=official`，用 `TRENDS_ENV_FILE` 指向它。
 2. 把 Git 提交对应的源码放到服务器，设置 `TRENDS_RELEASE` 为提交号并构建启动。若 PostgreSQL 位于不同 Docker 网络，设置 `TRENDS_PG_NETWORK`。
 
 ```sh
@@ -72,12 +72,20 @@ docker compose up --build -d
 | `/entities` | `q`、`market=CN\|HK`、`limit`、`offset` |
 | `/entities/{id}` | 示例 `0700.HK` |
 | `/metrics` | 指标列表及计算口径 |
-| `/series` | 必填 `entity_id`、`metric_id`。默认 `period=annual`，`quarterly` 目前返回空数组 |
+| `/series` | 必填 `entity_id`、`metric_id`。默认 `period=annual`，`quarterly` 为单季，`monthly` 为按自然月披露的指标 |
 | `/insights` | `entity_id`、`category`、`limit`、`offset` |
 | `/insights/{id}` | 规则洞察及对应信号序列 |
 | `/insights/{id}/evidence` | 规则使用的观测记录与来源 |
 
-## 数据口径
+## 真实数据
+
+首批数据来自 [发行人披露清单](services/data-pipeline/data/disclosures.json)。每条记录附有原始文件、公开日期、披露期间、币种和原始单位。导入时校验期间与单位并在一个事务中写入。重复导入同一来源中的同一记录不会写入新版本。
+
+- 同一指标优先展示月度、季度、年度中已核对的最高频率。财务季度为单季，图上对未披露期间保留空缺。港股发行人的报告币种按原始披露保留。
+- 小米全球月活跃用户按报告列明的自然月入库。月度序列目前只覆盖已核对的月份，披露月份之外留空。
+- 首批关注营业收入、归母净利润和已核对的经营指标。源文件以财报或公司公告链接为主，不保存报告全文。当前导入来自经复核的静态清单，未配置每日自动采集，也未接入需要另行许可的行情数据。
+
+## Mock 数据口径
 
 - 原始样本见 `services/data-pipeline/mock_source.py`。无外部数据 API、真实财报披露时间、行情或估值授权。
 - 所有样本为年度 CNY。存储货币指标使用十亿 CNY，页面换算为亿元 CNY。同比和利润率以百分数存储，差值以百分点呈现。

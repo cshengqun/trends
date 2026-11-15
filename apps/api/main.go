@@ -18,7 +18,22 @@ import (
 )
 
 type server struct {
-	db *pgxpool.Pool
+	db       *pgxpool.Pool
+	official bool
+}
+
+func (s server) dataKind() string {
+	if s.official {
+		return "official"
+	}
+	return "mock"
+}
+
+func (s server) quality() string {
+	if s.official {
+		return "verified"
+	}
+	return "mock"
 }
 
 type envelope struct {
@@ -83,7 +98,7 @@ const entityProjection = `
 	FROM entities e
 	LEFT JOIN LATERAL (
 		SELECT max(period_end) AS period_end, max(available_at) AS data_updated_at
-		FROM observations WHERE entity_id = e.id AND available_at <= now()
+		FROM observations WHERE quality_status=$1 AND entity_id = e.id AND available_at <= now()
 	) latest ON true
 `
 
@@ -97,28 +112,36 @@ func (s server) entities(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY t.symbol), '[]') FROM (`+entityProjection+`
-		WHERE kind = 'stock' AND ($1 = '' OR strpos(lower(name), lower($1)) > 0 OR strpos(lower(symbol), lower($1)) > 0)
-		AND ($2 = '' OR market = $2) ORDER BY symbol LIMIT $3 OFFSET $4
-	) t`, search, market, limit, offset)
+		WHERE kind = 'stock' AND latest.period_end IS NOT NULL
+		AND ($2 = '' OR strpos(lower(name), lower($2)) > 0 OR strpos(lower(symbol), lower($2)) > 0
+			OR (market='HK' AND ltrim(split_part(lower(symbol),'.',1),'0') =
+				ltrim(regexp_replace(lower($2),'\.hk$',''),'0')))
+		AND ($3 = '' OR market = $3) ORDER BY symbol LIMIT $4 OFFSET $5
+	) t`, s.quality(), search, market, limit, offset)
 }
 
 func (s server) entity(w http.ResponseWriter, r *http.Request) {
 	s.query(w, r, `SELECT to_jsonb(t) || jsonb_build_object('latest_metrics', (
 		SELECT coalesce(jsonb_agg(to_jsonb(metric) ORDER BY display_order), '[]') FROM (
 			SELECT DISTINCT ON (o.metric_id) o.metric_id, m.name, m.category, m.display_order,
-				o.value, o.unit, o.currency, o.period_end
+				o.value, o.unit, o.currency, o.period_end, o.period_type
 			FROM observations o JOIN metrics m ON m.id=o.metric_id
-			WHERE o.entity_id=t.id AND o.period_type='annual' AND o.available_at <= now()
-				AND o.period_end=(SELECT max(period_end) FROM observations
-					WHERE entity_id=t.id AND period_type='annual' AND available_at <= now())
-			ORDER BY o.metric_id, o.revision DESC
+			WHERE o.entity_id=t.id AND o.quality_status=$1 AND o.available_at <= now()
+			ORDER BY o.metric_id, CASE o.period_type WHEN 'monthly' THEN 1 WHEN 'quarterly' THEN 2 ELSE 3 END,
+				o.period_end DESC, o.revision DESC
 		) metric
-	)) FROM (`+entityProjection+` WHERE e.id = $1) t`,
-		strings.ToUpper(r.PathValue("id")))
+	), 'available_series', (
+		SELECT coalesce(jsonb_agg(to_jsonb(series) ORDER BY metric_id, period_type), '[]') FROM (
+			SELECT DISTINCT o.metric_id, o.period_type FROM observations o
+			WHERE o.entity_id=t.id AND o.quality_status=$1 AND o.available_at <= now()
+		) series
+	)) FROM (`+entityProjection+` WHERE e.id = $2 AND latest.period_end IS NOT NULL) t`,
+		s.quality(), strings.ToUpper(r.PathValue("id")))
 }
 
 func (s server) metrics(w http.ResponseWriter, r *http.Request) {
-	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(m) ORDER BY display_order), '[]') FROM metrics m`)
+	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(m) ORDER BY display_order), '[]') FROM metrics m
+		WHERE EXISTS (SELECT 1 FROM observations WHERE metric_id=m.id AND quality_status=$1 AND available_at<=now())`, s.quality())
 }
 
 const observationProjection = `
@@ -136,7 +159,7 @@ func (s server) series(w http.ResponseWriter, r *http.Request) {
 		period = "annual"
 	}
 	if entity == "" || metric == "" || len(entity) > 80 || len(metric) > 80 ||
-		(period != "annual" && period != "quarterly") {
+		(period != "annual" && period != "quarterly" && period != "monthly") {
 		fail(w, 400, "invalid_query", "请指定公司、指标及有效的财务期间")
 		return
 	}
@@ -144,13 +167,13 @@ func (s server) series(w http.ResponseWriter, r *http.Request) {
 		EXISTS (SELECT 1 FROM entities WHERE id=$1) AND EXISTS (SELECT 1 FROM metrics WHERE id=$2)
 		THEN coalesce((SELECT jsonb_agg(to_jsonb(t) ORDER BY period_end) FROM (`+observationProjection+`
 			JOIN (SELECT DISTINCT ON (period_end) id FROM observations
-			      WHERE entity_id=$1 AND metric_id=$2 AND period_type=$3 AND available_at <= now()
+			      WHERE entity_id=$1 AND metric_id=$2 AND period_type=$3 AND quality_status=$4 AND available_at <= now()
 			      ORDER BY period_end, revision DESC) latest ON latest.id=o.id
-		) t), '[]') END`, entity, metric, period)
+		) t), '[]') END`, entity, metric, period, s.quality())
 }
 
 const insightProjection = `
-	SELECT i.*, e.name AS entity_name, e.symbol, m.name AS metric_name,
+	SELECT i.*, e.name AS entity_name, e.symbol, m.name AS metric_name, m.unit AS metric_unit,
 		(SELECT max(o.available_at) FROM insight_evidence ie JOIN observations o ON o.id=ie.observation_id
 		 WHERE ie.insight_id=i.id) AS data_updated_at,
 		coalesce((
@@ -169,7 +192,7 @@ func (s server) insights(w http.ResponseWriter, r *http.Request) {
 	category, entity := q.Get("category"), strings.ToUpper(q.Get("entity_id"))
 	limit, offset, ok := pagination(q)
 	switch category {
-	case "", "growth", "profitability", "cash_flow", "financial_health", "valuation":
+	case "", "growth", "profitability", "cash_flow", "financial_health", "valuation", "operations":
 	default:
 		ok = false
 	}
@@ -178,31 +201,34 @@ func (s server) insights(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	s.query(w, r, `SELECT coalesce(jsonb_agg(to_jsonb(t) ORDER BY rule_id, symbol, id), '[]') FROM (`+insightProjection+`
-		WHERE ($1 = '' OR i.category=$1) AND ($2 = '' OR i.entity_id=$2)
+		WHERE ($1 = '' OR i.category=$1) AND ($2 = '' OR i.entity_id=$2) AND i.data_kind=$5
 		ORDER BY rule_id, symbol, i.id LIMIT $3 OFFSET $4
-	) t`, category, entity, limit, offset)
+	) t`, category, entity, limit, offset, s.dataKind())
 }
 
 func (s server) insight(w http.ResponseWriter, r *http.Request) {
-	s.query(w, r, `SELECT to_jsonb(t) FROM (`+insightProjection+` WHERE i.id=$1) t`, r.PathValue("id"))
+	s.query(w, r, `SELECT to_jsonb(t) FROM (`+insightProjection+` WHERE i.id=$1 AND i.data_kind=$2) t`,
+		r.PathValue("id"), s.dataKind())
 }
 
 func (s server) evidence(w http.ResponseWriter, r *http.Request) {
-	s.query(w, r, `SELECT CASE WHEN EXISTS (SELECT 1 FROM insights WHERE id=$1) THEN
+	s.query(w, r, `SELECT CASE WHEN EXISTS (SELECT 1 FROM insights WHERE id=$1 AND data_kind=$2) THEN
 		coalesce((SELECT jsonb_agg(to_jsonb(t) ORDER BY period_end, metric_id) FROM (`+observationProjection+`
 		JOIN insight_evidence ie ON ie.observation_id=o.id WHERE ie.insight_id=$1
-	) t), '[]') END`, r.PathValue("id"))
+	) t), '[]') END`, r.PathValue("id"), s.dataKind())
 }
 
 func (s server) overview(w http.ResponseWriter, r *http.Request) {
-	s.query(w, r, `SELECT jsonb_build_object(
-		'company_count', (SELECT count(*) FROM entities WHERE kind='stock'),
-		'insight_count', (SELECT count(*) FROM insights),
-		'latest_period', (SELECT max(period_end) FROM observations),
-		'last_updated_at', (SELECT max(available_at) FROM observations),
-		'market_count', (SELECT count(DISTINCT market) FROM entities WHERE kind='stock'),
-		'data_kind', 'mock'
-	)`)
+	s.query(w, r, `WITH published AS (
+		SELECT entity_id, period_end, available_at FROM observations WHERE quality_status=$1 AND available_at<=now()
+	) SELECT jsonb_build_object(
+		'company_count', (SELECT count(DISTINCT entity_id) FROM published),
+		'insight_count', (SELECT count(*) FROM insights WHERE data_kind=$2),
+		'latest_period', (SELECT max(period_end) FROM published),
+		'last_updated_at', (SELECT max(available_at) FROM published),
+		'market_count', (SELECT count(DISTINCT market) FROM entities WHERE id IN (SELECT entity_id FROM published)),
+		'data_kind', $2::text
+	)`, s.quality(), s.dataKind())
 }
 
 func (s server) health(w http.ResponseWriter, r *http.Request) {
@@ -210,12 +236,12 @@ func (s server) health(w http.ResponseWriter, r *http.Request) {
 	defer cancel()
 	var ready bool
 	err := s.db.QueryRow(ctx, `SELECT EXISTS (SELECT 1 FROM data_ingestion_runs WHERE status='success')
-		AND EXISTS (SELECT 1 FROM observations)`).Scan(&ready)
+		AND EXISTS (SELECT 1 FROM observations WHERE quality_status=$1 AND available_at<=now())`, s.quality()).Scan(&ready)
 	if err != nil || !ready {
-		fail(w, 503, "not_ready", "数据库或 Mock 数据尚未就绪")
+		fail(w, 503, "not_ready", "数据库或当前数据集尚未就绪")
 		return
 	}
-	send(w, 200, envelope{Data: map[string]string{"status": "ok", "database": "postgresql", "data_kind": "mock"}})
+	send(w, 200, envelope{Data: map[string]string{"status": "ok", "database": "postgresql", "data_kind": s.dataKind()}})
 }
 
 func (s server) routes(web http.Handler, basePath string) http.Handler {
@@ -245,6 +271,10 @@ func (s server) routes(web http.Handler, basePath string) http.Handler {
 }
 
 func main() {
+	mode := os.Getenv("TRENDS_DATA_MODE")
+	if mode != "" && mode != "official" && mode != "mock" {
+		log.Fatal("TRENDS_DATA_MODE must be mock or official")
+	}
 	dsn := os.Getenv("DATABASE_URL")
 	if dsn == "" {
 		log.Fatal("DATABASE_URL is required")
@@ -275,7 +305,7 @@ func main() {
 		port = "8080"
 	}
 	app := &http.Server{
-		Addr: ":" + port, Handler: (server{db: pool}).routes(web, os.Getenv("NEXT_PUBLIC_BASE_PATH")),
+		Addr: ":" + port, Handler: (server{db: pool, official: mode == "official"}).routes(web, os.Getenv("NEXT_PUBLIC_BASE_PATH")),
 		ReadHeaderTimeout: 5 * time.Second, IdleTimeout: 60 * time.Second,
 	}
 	log.Printf("Trends listening on port %s", port)

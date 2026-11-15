@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: { default: "Trends · 趋势发现", template: "%s · Trends" },
-  description: "探索 A 股与港股公司财务趋势。当前为明确标识的 Mock 数据演示环境。",
+  description: "探索 A 股与港股公司财务趋势。查看上市公司财务与经营数据的披露来源。",
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {
