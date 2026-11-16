@@ -69,6 +69,10 @@ def verify_disclosures_api():
     assert overview["data_kind"] == "official" and overview["company_count"] >= len(expected)
     assert expected.issubset({item["symbol"] for item in api("/entities", limit=100)})
     assert [item["symbol"] for item in api("/entities", q="00100")] == ["0100.HK"]
+    for symbol in sorted(expected):
+        profile = api("/entities/" + symbol)["profile"]
+        assert profile["business_model"] and profile["target_users"], symbol
+        assert profile["source_label"] and profile["source_url"].startswith("https://"), symbol
     mini = api("/series", entity_id="0100.HK", metric_id="revenue", period="annual")
     assert any(row["period_end"] == "2025-12-31" and row["currency"] == "USD" and row["value"] == 0.079038 for row in mini)
     tencent = api("/series", entity_id="0700.HK", metric_id="revenue", period="quarterly")
@@ -138,6 +142,9 @@ def verify_browser(kind):
         expect(page.locator(".quarterly-plot canvas")).to_have_count(6)
         expect(page.get_by_text("近 3 年", exact=False)).to_be_visible()
         if kind == "official":
+            expect(page.get_by_role("heading", name="商业模式")).to_be_visible()
+            expect(page.get_by_role("heading", name="目标用户")).to_be_visible()
+            expect(page.get_by_role("link", name="资料来源 · 小米集团 2025 年年度报告")).to_be_visible()
             page.get_by_text("指标数据来源", exact=True).click()
             expect(page.get_by_role("link", name="小米 2026 年第二季度业绩公告")).to_be_visible()
 

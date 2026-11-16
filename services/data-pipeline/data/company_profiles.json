@@ -1,0 +1,104 @@
+{
+  "0100.HK": {
+    "business_model": "研发文本和多模态基础模型，通过海螺 AI、MiniMax Agent 等产品的订阅与付费服务，以及开放平台的 API 用量和企业服务获得收入。",
+    "target_users": "使用 AI 创作视频、音频或完成日常任务的个人用户与创作者，以及将模型接入应用和工作流程的开发者和企业。",
+    "source_label": "MiniMax 招股章程",
+    "source_url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2025/1231/2025123100025.pdf"
+  },
+  "2513.HK": {
+    "business_model": "研发 GLM 系列大模型并提供模型即服务，通过云端 API、订阅产品和本地部署向客户收费。",
+    "target_users": "需要集成模型或在自有环境部署 AI 的企业及机构，以及通过开放平台和编程工具使用模型的开发者。",
+    "source_label": "智谱 2026 年中期报告",
+    "source_url": "https://www.hkexnews.hk/listedco/listconews/sehk/2026/0924/2026092401583.pdf"
+  },
+  "9880.HK": {
+    "business_model": "研发和销售智能机器人，并为工业、人形机器人、教育和物流等场景提供软硬件一体化解决方案。",
+    "target_users": "在工厂部署机器人的制造企业、需要仓内自动化的物流和仓储企业，以及采购机器人教学设备和课程的学校与教育机构。",
+    "source_label": "优必选 2025 年年度报告",
+    "source_url": "https://owebsite-cdn.ubtrobot.com/resources/file/2026/04/21/797179114676293.pdf"
+  },
+  "9988.HK": {
+    "business_model": "经营淘宝、天猫等国内外电商平台，收入来自商家营销与交易服务、自营零售等。阿里云通过算力、存储、数据库和 AI 服务收费。",
+    "target_users": "国内外网购消费者、品牌及零售商家、批发买卖双方，以及采购云和 AI 服务的企业与开发者。",
+    "source_label": "阿里巴巴 2026 财年 Form 20-F",
+    "source_url": "https://data.alibabagroup.com/ir_filings/SEC/BABA/000119312526231755/baba-20260331.htm"
+  },
+  "3690.HK": {
+    "business_model": "通过外卖、即时零售和到店酒旅连接消费者与本地商家，主要通过配送服务费、交易佣金、线上营销和商品销售获得收入。",
+    "target_users": "有外卖、买药、日用品即时配送、到店消费或旅行需求的消费者，以及餐饮、零售、酒店和其他本地商家。",
+    "source_label": "美团 2025 年年度报告",
+    "source_url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0424/2026042400179.pdf"
+  },
+  "1810.HK": {
+    "business_model": "销售智能手机、智能家居及其他 IoT 硬件和智能电动汽车，同时通过广告、游戏等互联网服务获得收入。",
+    "target_users": "购买手机、可穿戴设备、智能家电和电动车的个人与家庭，以及通过小米互联网平台投放广告的商家。",
+    "source_label": "小米集团 2025 年年度报告",
+    "source_url": "https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0428/2026042800526.pdf"
+  },
+  "0700.HK": {
+    "business_model": "围绕微信、QQ、游戏和数字内容提供增值服务，同时通过广告、支付与金融科技服务，以及云和企业服务获得收入。",
+    "target_users": "社交和内容平台用户、国内外游戏玩家、投放广告的品牌与商家，以及需要支付、云计算和数字化工具的企业。",
+    "source_label": "腾讯 2025 年年度报告",
+    "source_url": "https://static.www.tencent.com/uploads/2026/04/09/62d786fcf3d3c8cb7e54791ee95439ac.pdf"
+  },
+  "000333.SZ": {
+    "business_model": "通过经销、零售和电商销售家电及智能家居产品，同时向企业销售楼宇空调、工业零部件、机器人与自动化设备，并提供配套解决方案。",
+    "target_users": "购买空调、厨电及其他家电的家庭，以及楼宇运营方、家电与汽车制造商、需要工业自动化的工厂。",
+    "source_label": "美的集团 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-31/1225065145.PDF"
+  },
+  "600036.SH": {
+    "business_model": "经营个人和企业存贷款、支付结算、财富管理、资产托管及金融市场业务，通过净利息收入和手续费等获得收入。",
+    "target_users": "有日常银行、借贷与理财需求的个人及高净值客户，需要结算和融资的企业，以及使用托管和同业服务的金融机构。",
+    "source_label": "招商银行 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-28/1225047590.PDF"
+  },
+  "002371.SZ": {
+    "business_model": "研发、制造和销售刻蚀、薄膜沉积、热处理和清洗等半导体工艺设备，同时经营精密电子元器件。",
+    "target_users": "集成电路制造商和其他半导体器件厂商，以及采购精密电子元器件的工业、电力电子等设备厂商。",
+    "source_label": "北方华创 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-18/1225122918.PDF"
+  },
+  "600900.SH": {
+    "business_model": "运营大型水电站，通过销售电力获得收入，并开展市场化售电等相关业务。",
+    "target_users": "主要购电客户包括国家电网、南方电网。市场化售电业务也服务具备交易资格的电力零售客户。",
+    "source_label": "长江电力 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225262036.PDF"
+  },
+  "600941.SH": {
+    "business_model": "运营通信网络，通过移动通信、家庭宽带和套餐收费。同时向政企提供云计算、数据中心、物联网及行业数字化服务。",
+    "target_users": "个人手机用户、家庭宽带用户、政府机关和各行业企业，以及需要物联网连接或云和算力服务的客户。",
+    "source_label": "中国移动 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225036280.PDF"
+  },
+  "601318.SH": {
+    "business_model": "以寿险、健康险和财产险为核心，同时经营银行、资产管理等业务。收入来源包括保险服务、银行净利息、手续费和投资收益。",
+    "target_users": "购买保险、办理银行及财富管理业务的个人与家庭，以及需要财产险、融资或资产管理服务的企业和机构。",
+    "source_label": "中国平安 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225038263.PDF"
+  },
+  "600938.SH": {
+    "business_model": "在中国及海外勘探、开发并生产油气，主要通过销售原油和天然气获得收入。",
+    "target_users": "采购原油的炼化企业、石油公司与贸易商，以及采购天然气的燃气企业和其他工业客户。",
+    "source_label": "中国海油 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-27/1225036017.PDF"
+  },
+  "600887.SH": {
+    "business_model": "生产液态奶、奶粉、冷饮、奶酪和营养品，通过经销、零售与电商销售，并向餐饮客户供应乳制品原料。",
+    "target_users": "日常购买乳制品的家庭、婴幼儿及成人营养品消费者，以及采购奶油、奶酪、黄油等原料的烘焙、餐饮与茶饮商家。",
+    "source_label": "伊利股份 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-30/1225259562.PDF"
+  },
+  "300866.SZ": {
+    "business_model": "以自有品牌研发和销售充电、储能、智能家居与影音等消费电子产品，通过线上平台、独立站和线下零售渠道销售。",
+    "target_users": "全球有设备充电、户外与家庭储能、家庭安防、清洁或影音需求的消费者。零售商及经销商也是销售渠道客户。",
+    "source_label": "安克创新 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-04-10/1225090973.PDF"
+  },
+  "300750.SZ": {
+    "business_model": "研发和销售动力电池、储能电池及系统，同时经营电池材料与回收业务，并拓展换电服务。",
+    "target_users": "新能源汽车制造商、储能系统集成商、电力与新能源项目开发商，以及需要电池和换电服务的商用车运营企业。",
+    "source_label": "宁德时代 2025 年年度报告",
+    "source_url": "https://static.cninfo.com.cn/finalpage/2026-03-10/1225002214.PDF"
+  }
+}

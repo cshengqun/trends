@@ -32,6 +32,15 @@ export function Stock({ symbol }: { symbol: string }) {
         <h1>{entity.data.name}</h1>
         <p>{marketName(entity.data.market)} · {entity.data.industry}</p>
       </div>
+      {entity.data.profile && <section className="panel company-profile" aria-label="公司业务">
+        <div className="company-profile-grid">
+          <div><h2>商业模式</h2><p>{entity.data.profile.business_model}</p></div>
+          <div><h2>目标用户</h2><p>{entity.data.profile.target_users}</p></div>
+        </div>
+        <a className="text-link" href={entity.data.profile.source_url} target="_blank" rel="noreferrer">
+          资料来源 · {entity.data.profile.source_label}
+        </a>
+      </section>}
       {dashboard.status === "loading" ? <State type="loading" /> : dashboard.status === "error" ?
         <State type="error" message={dashboard.message} retry={dashboard.retry} /> : <QuarterlyDashboard {...dashboard.data} />}
     </>}

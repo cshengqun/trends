@@ -13,7 +13,11 @@ export type Period = typeof periods[number];
 export const periodNames: Record<Period, string> = { monthly: "月度", quarterly: "季度", annual: "年度" };
 export type DataKind = "official" | "mock";
 export type LatestMetric = Point & { metric_id: string; name: string; unit: string; currency: string; period_type: Period };
-export type EntityDetail = Entity & { latest_metrics: LatestMetric[]; available_series: { metric_id: string; period_type: Period }[] };
+export type EntityDetail = Entity & {
+  latest_metrics: LatestMetric[];
+  available_series: { metric_id: string; period_type: Period }[];
+  profile: { business_model: string; target_users: string; source_label: string; source_url: string } | null;
+};
 export type Observation = Point & {
   id: number; metric_name: string; metric_id: string; currency: string; unit: string;
   published_at: string | null; available_at: string; source_id: string; source_label: string;

@@ -12,6 +12,8 @@ from urllib.parse import urlsplit
 from psycopg.types.json import Jsonb
 
 SNAPSHOT = Path(__file__).with_name("data") / "disclosures.json"
+COMPANY_PROFILES = SNAPSHOT.with_name("company_profiles.json")
+PROFILE_FIELDS = ("business_model", "target_users", "source_label", "source_url")
 VERSION = "filing-v1"
 MONTHS = {"monthly": 1, "quarterly": 3, "annual": 12}
 SCALES = {"yuan": 10**9, "thousand": 10**6, "million": 1000, "billion": 1}
@@ -84,6 +86,25 @@ def load_snapshot(path=SNAPSHOT):
     return document
 
 
+def load_company_profiles(companies, path=COMPANY_PROFILES):
+    profiles = json.loads(path.read_text(encoding="utf-8"))
+    symbols = {company[0] for company in companies}
+    if not isinstance(profiles, dict) or profiles.keys() - symbols:
+        raise ValueError("Company profiles must be keyed by a known symbol")
+    result = []
+    for symbol, profile in profiles.items():
+        if not isinstance(profile, dict) or any(
+            not isinstance(profile.get(field), str) or not profile[field].strip()
+            for field in PROFILE_FIELDS
+        ):
+            raise ValueError(f"Incomplete company profile: {symbol}")
+        source = urlsplit(profile["source_url"])
+        if source.scheme != "https" or not source.hostname:
+            raise ValueError(f"Invalid company profile source: {symbol}")
+        result.append((symbol, *(profile[field] for field in PROFILE_FIELDS)))
+    return result
+
+
 def insert_observation(conn, symbol, source_id, row, metric, raw, published_at):
     freq = row["period"]
     end = date.fromisoformat(row["end"])
@@ -148,7 +169,7 @@ def yoy_insights(conn, values):
             break
 
 
-def import_disclosures(conn, document):
+def import_disclosures(conn, document, profiles):
     started = datetime.now(timezone.utc)
     written = 0
     signals = defaultdict(dict)
@@ -160,6 +181,19 @@ def import_disclosures(conn, document):
                 VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING
             """, [(symbol, symbol, name, market, exchange, industry)
                   for symbol, name, market, exchange, industry in document["companies"]])
+            cursor.executemany("""
+                INSERT INTO company_profiles (entity_id, business_model, target_users, source_label, source_url)
+                VALUES (%s, %s, %s, %s, %s)
+                ON CONFLICT (entity_id) DO UPDATE SET
+                    business_model = EXCLUDED.business_model,
+                    target_users = EXCLUDED.target_users,
+                    source_label = EXCLUDED.source_label,
+                    source_url = EXCLUDED.source_url
+                WHERE (company_profiles.business_model, company_profiles.target_users,
+                       company_profiles.source_label, company_profiles.source_url)
+                      IS DISTINCT FROM (EXCLUDED.business_model, EXCLUDED.target_users,
+                                        EXCLUDED.source_label, EXCLUDED.source_url)
+            """, profiles)
             cursor.executemany("""
                 INSERT INTO metrics (id, name, category, unit, formula, display_order)
                 VALUES (%s,%s,%s,%s,%s,%s) ON CONFLICT (id) DO NOTHING

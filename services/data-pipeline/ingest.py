@@ -9,7 +9,7 @@ from psycopg.types.json import Jsonb
 
 from financials import METRICS, VERSION, calculate, detect
 from mock_source import MockAnnualAdapter
-from official_data import import_disclosures, load_snapshot
+from official_data import import_disclosures, load_company_profiles, load_snapshot
 
 MIGRATIONS = Path(__file__).resolve().parents[2] / "database" / "migrations"
 LOGGER = logging.getLogger("trends.pipeline")
@@ -130,7 +130,8 @@ if __name__ == "__main__":
         migrate(database)
         mode = os.getenv("TRENDS_DATA_MODE", "mock") or "mock"
         if mode == "official":
-            written = import_disclosures(database, load_snapshot())
+            document = load_snapshot()
+            written = import_disclosures(database, document, load_company_profiles(document["companies"]))
             LOGGER.info("Issuer disclosure import completed, %d new observations", written)
         elif mode == "mock":
             run(database, MockAnnualAdapter())

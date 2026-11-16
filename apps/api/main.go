@@ -121,7 +121,7 @@ func (s server) entities(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s server) entity(w http.ResponseWriter, r *http.Request) {
-	s.query(w, r, `SELECT to_jsonb(t) || jsonb_build_object('latest_metrics', (
+	s.query(w, r, `SELECT to_jsonb(t) || jsonb_build_object('profile', to_jsonb(profile) - 'entity_id', 'latest_metrics', (
 		SELECT coalesce(jsonb_agg(to_jsonb(metric) ORDER BY display_order), '[]') FROM (
 			SELECT DISTINCT ON (o.metric_id) o.metric_id, m.name, m.category, m.display_order,
 				o.value, o.unit, o.currency, o.period_end, o.period_type
@@ -136,7 +136,8 @@ func (s server) entity(w http.ResponseWriter, r *http.Request) {
 			SELECT DISTINCT o.metric_id, o.period_type FROM observations o
 			WHERE o.entity_id=t.id AND o.quality_status=$1 AND o.available_at <= now()
 		) series
-	)) FROM (`+entityProjection+` WHERE e.id = $2 AND latest.period_end IS NOT NULL) t`,
+	)) FROM (`+entityProjection+` WHERE e.id = $2 AND latest.period_end IS NOT NULL) t
+	LEFT JOIN company_profiles profile ON profile.entity_id=t.id AND $1='verified'`,
 		s.quality(), strings.ToUpper(r.PathValue("id")))
 }
 

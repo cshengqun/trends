@@ -68,6 +68,11 @@ a { color: inherit; text-decoration: none; }
 .chart { width: 100%; min-width: 0; }
 .chart-hero { height: 157px; margin-top: 9px; }
 .chart-full { height: clamp(215px, 32vw, 345px); }
+.company-profile { margin-bottom: 24px; padding: 18px; }
+.company-profile-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.company-profile h2 { margin: 0 0 6px; font-size: 16px; }
+.company-profile p { margin: 0; color: var(--muted); line-height: 1.65; }
+.company-profile .text-link { margin-top: 13px; font-size: 12px; }
 .quarterly-period { margin: 0 0 14px; color: var(--muted); }
 .quarterly-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .quarterly-card { min-width: 0; padding: 18px 18px 8px; }
@@ -82,7 +87,7 @@ a { color: inherit; text-decoration: none; }
 .quarterly-sources { padding: 16px; }
 .quarterly-sources summary { cursor: pointer; }
 @media (max-width: 780px) {
-  .quarterly-grid { grid-template-columns: minmax(0, 1fr); }
+  .company-profile-grid, .quarterly-grid { grid-template-columns: minmax(0, 1fr); }
 }
 .chart-spark { width: 100%; height: 46px; }
 .stats { margin-top: 17px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
