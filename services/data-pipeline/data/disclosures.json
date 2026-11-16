@@ -118,9 +118,34 @@
       "CN",
       "SZSE",
       "动力电池"
+    ],
+    [
+      "601919.SH",
+      "中远海控",
+      "CN",
+      "SSE",
+      "航运与港口"
     ]
   ],
   "filings": [
+    {
+      "symbol": "601919.SH",
+      "published": "2026-10-30",
+      "label": "中远海控 2026 年第三季度报告",
+      "url": "https://static.cninfo.com.cn/finalpage/2026-10-30/1225642417.PDF",
+      "rows": [
+        {
+          "period": "quarterly",
+          "end": "2026-09-30",
+          "currency": "CNY",
+          "scale": "yuan",
+          "values": {
+            "revenue": "75691788243.39",
+            "net_income": "17230012400.17"
+          }
+        }
+      ]
+    },
     {
       "symbol": "0100.HK",
       "published": "2026-03-02",
