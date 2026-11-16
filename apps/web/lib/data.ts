@@ -8,9 +8,9 @@ export type Metric = {
 };
 
 export type Point = { period_end: string; value: number };
-export const periods = ["monthly", "quarterly", "annual"] as const;
+export const periods = ["weekly", "monthly", "quarterly", "annual"] as const;
 export type Period = typeof periods[number];
-export const periodNames: Record<Period, string> = { monthly: "月度", quarterly: "季度", annual: "年度" };
+export const periodNames: Record<Period, string> = { weekly: "周线", monthly: "月度", quarterly: "季度", annual: "年度" };
 export type DataKind = "official" | "mock";
 export type LatestMetric = Point & { metric_id: string; name: string; unit: string; currency: string; period_type: Period };
 export type EntityDetail = Entity & {
@@ -70,12 +70,14 @@ export function metricValue(value: number, unit: string) {
 
 export function metricUnit(unit: string, currency = "CNY") {
   if (unit === "billion") return currency === "CNY" ? "亿元 CNY" : "亿 " + currency;
+  if (unit === "price") return currency;
   if (unit === "million_users") return "百万用户";
   return unit;
 }
 
 export function periodLabel(value: string, period: Period) {
   const year = value.slice(0, 4);
+  if (period === "weekly") return value.slice(0, 10);
   if (period === "annual") return "FY " + year;
   if (period === "quarterly") return year + " Q" + Math.ceil(Number(value.slice(5, 7)) / 3);
   return value.slice(0, 7);

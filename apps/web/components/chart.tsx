@@ -10,6 +10,7 @@ import { fmt, periodLabel, periodNames, type Period, type Point } from "@/lib/da
 use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRenderer]);
 
 type Option = ComposeOption<BarSeriesOption | LineSeriesOption | GridComponentOption | TooltipComponentOption>;
+const dayMilliseconds = 86_400_000;
 
 function monthIndex(value: string) {
   return Number(value.slice(0, 4)) * 12 + Number(value.slice(5, 7)) - 1;
@@ -26,16 +27,18 @@ export function Chart({ points, unit, label, mode = "line", size = "full", down 
     const spark = size === "spark";
     const hero = size === "hero";
     const color = down ? "#f4a37d" : "#64efbc";
-    const step = period === "annual" ? 12 : period === "quarterly" ? 3 : 1;
+    const weekly = period === "weekly";
+    const dateIndex = weekly ? (value: string) => Date.parse(value) / dayMilliseconds : monthIndex;
+    const step = weekly ? 7 : period === "annual" ? 12 : period === "quarterly" ? 3 : 1;
     const values = new Map(points.map(({ period_end, value }) =>
-      [monthIndex(period_end), unit === "billion" ? value * 10 : value]));
+      [dateIndex(period_end), unit === "billion" ? value * 10 : value]));
     const dates = [...values.keys()];
-    const start = startDate ? monthIndex(startDate) : Math.min(...dates);
-    const end = endDate ? monthIndex(endDate) : Math.max(...dates);
+    const start = startDate ? dateIndex(startDate) : Math.min(...dates);
+    const end = endDate ? dateIndex(endDate) : Math.max(...dates);
     const indices = spark ? dates : Array.from({ length: Math.floor((end - start) / step) + 1 },
       (_, i) => start + i * step);
-    const labels = indices.map((index) => periodLabel(
-      Math.floor(index / 12) + "-" + String(index % 12 + 1).padStart(2, "0"), period));
+    const labels = indices.map((index) => weekly ? new Date(index * dayMilliseconds).toISOString().slice(0, 10) :
+      periodLabel(Math.floor(index / 12) + "-" + String(index % 12 + 1).padStart(2, "0"), period));
     const dataset = indices.map((index) => values.get(index) ?? null);
     const graph = init(element.current);
     const option: Option = {
@@ -44,11 +47,13 @@ export function Chart({ points, unit, label, mode = "line", size = "full", down 
         { left: hero ? 12 : 58, right: 15, top: 16, bottom: 30 },
       tooltip: spark ? undefined : {
         trigger: "axis", confine: true, backgroundColor: "#101e2a", borderColor: "#2c4350",
-        textStyle: { color: "#ecf4fa" }, valueFormatter: (value) => value == null ? "缺失" : fmt(Number(value)) + " " + axisUnit,
+        textStyle: { color: "#ecf4fa" }, valueFormatter: (value) => value == null ? "缺失" :
+          fmt(Number(value), weekly ? 3 : 2) + " " + axisUnit,
       },
       xAxis: {
         type: "category", data: labels.map(String), show: !spark, boundaryGap: mode === "bar",
-        axisTick: { show: false }, axisLabel: { color: "#889eab", hideOverlap: true, fontSize: 11 },
+        axisTick: { show: false }, axisLabel: { color: "#889eab", hideOverlap: true, fontSize: 11,
+          interval: weekly ? 12 : undefined },
         axisLine: { lineStyle: { color: "#283845" } },
       },
       yAxis: {
@@ -61,8 +66,9 @@ export function Chart({ points, unit, label, mode = "line", size = "full", down 
         type: "bar", name: label, data: dataset, barMaxWidth: 34,
         itemStyle: { color, borderRadius: [4, 4, 0, 0] },
       }] : [{
-        type: "line", name: label, data: dataset, connectNulls: false, smooth: 0.23,
-        showSymbol: !spark && (!hero || points.length <= 4), symbolSize: 6, lineStyle: { color, width: spark ? 2 : 2.5 },
+        type: "line", name: label, data: dataset, connectNulls: false, smooth: weekly ? false : 0.23,
+        showSymbol: weekly ? points.length === 1 : !spark && (!hero || points.length <= 4),
+        symbolSize: 6, lineStyle: { color, width: spark ? 2 : 2.5 },
         itemStyle: { color },
         areaStyle: { color: {
           type: "linear", x: 0, y: 0, x2: 0, y2: 1,

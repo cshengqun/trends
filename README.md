@@ -71,6 +71,7 @@ docker compose up --build -d
 | `/entities` | `q`、`market=CN\|HK`、`limit`、`offset` |
 | `/entities/{id}` | 示例 `0700.HK` |
 | `/entities/{id}/quarterly` | 近 12 个完整自然季度的指标观测，包括同币种单季同比 |
+| `/series?period=weekly` | `metric_id=stock_price` 的最近 104 个完整交易周未复权收盘价 |
 | `/metrics` | 指标列表及计算口径 |
 | `/series` | 必填 `entity_id`、`metric_id`。默认 `period=annual`，`quarterly` 为单季，`monthly` 为按自然月披露的指标 |
 | `/insights` | `entity_id`、`category`、`limit`、`offset` |
@@ -84,6 +85,8 @@ docker compose up --build -d
 `deploy/akshare` 提供独立的云端同步容器和 systemd timer。任务按北京时间每月 5 日 03:15 查询最近 8 个完整自然季度，另取上年同期供同比计算。首次安装后手动启动一次即可初始化。
 
 同步使用 `AKSHARE_DATABASE_URL` 连接独立的 `trends_akshare` 库。任务保留每次运行与缺失记录，已拉取的季度数据保留来源与修订历史。相同结果重复运行会复用现有版本。
+
+股价用独立的 `trends-weekly-prices.timer`，北京时间每周六 08:15 从 AKShare 更新。每个有交易的自然周取最后一个交易日的未复权收盘价，保留实际交易日期和计价币种。
 
 配置公开展示权限后，同步成功会调用 `publish_akshare.py`，通过 `AKSHARE_PUBLISH_DATABASE_URL` 把通过校验的财务与估值数据发布至 `trends_disclosures`。相同期间和指标优先显示发行人原始披露，两项同比由公开 API 按展示值计算。估值数据保留季末实际交易日及上游来源。
 

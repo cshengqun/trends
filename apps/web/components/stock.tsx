@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Chart } from "./chart";
 import { State } from "./common";
 import { DataLabel } from "./shell";
-import { displayDate, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
+import { displayDate, fmt, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
 import { useData } from "@/lib/use-data";
 
 const metrics = [
@@ -41,10 +41,34 @@ export function Stock({ symbol }: { symbol: string }) {
           资料来源 · {entity.data.profile.source_label}
         </a>
       </section>}
+      <WeeklyPrice symbol={symbol} />
       {dashboard.status === "loading" ? <State type="loading" /> : dashboard.status === "error" ?
         <State type="error" message={dashboard.message} retry={dashboard.retry} /> : <QuarterlyDashboard {...dashboard.data} />}
     </>}
   </>;
+}
+
+function WeeklyPrice({ symbol }: { symbol: string }) {
+  const params = new URLSearchParams({ entity_id: symbol, metric_id: "stock_price", period: "weekly" });
+  const series = useData<Observation[]>("/series?" + params);
+  const points = series.status === "success" ? series.data : [];
+  const latest = points.at(-1);
+  return <section className="panel weekly-price" aria-label="股价周线">
+    <h2>股价周线</h2>
+    <p className="quarterly-note">近两年 · 每周最后一个交易日 · 未复权收盘价</p>
+    {series.status === "loading" ? <State type="loading" /> : series.status === "error" ?
+      <State type="error" message={series.message} retry={series.retry} /> : !latest ?
+        <State type="empty" message="暂无股价记录" /> : <>
+        <div className="quarterly-value">
+          <strong className="mono">{fmt(latest.value, 3)}</strong>
+          <span>{latest.currency} · {displayDate(latest.market_date ?? latest.period_end)}</span>
+        </div>
+        <Chart points={points} unit="price" label="股价" axisUnit={latest.currency} period="weekly" />
+        <a className="text-link weekly-price-source" href={latest.document_ref} target="_blank" rel="noreferrer">
+          {latest.source_label}
+        </a>
+      </>}
+  </section>;
 }
 
 function QuarterlyDashboard({ end_date, points }: Dashboard) {

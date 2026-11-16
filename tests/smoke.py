@@ -3,6 +3,7 @@
 import json
 import sys
 import time
+from datetime import date, timedelta
 from urllib.error import URLError
 from decimal import Decimal
 from urllib.parse import urlencode
@@ -73,6 +74,16 @@ def verify_disclosures_api():
         profile = api("/entities/" + symbol)["profile"]
         assert profile["business_model"] and profile["target_users"], symbol
         assert profile["source_label"] and profile["source_url"].startswith("https://"), symbol
+    if any(metric["id"] == "stock_price" for metric in api("/metrics")):
+        for symbol in sorted(expected):
+            weekly = api("/series", entity_id=symbol, metric_id="stock_price", period="weekly")
+            assert 0 < len(weekly) <= 104, symbol
+            assert len({row["period_end"] for row in weekly}) == len(weekly), symbol
+            for row in weekly:
+                friday = date.fromisoformat(row["period_end"])
+                trading_day = date.fromisoformat(row["market_date"])
+                assert friday.weekday() == 4 and friday - timedelta(days=4) <= trading_day <= friday
+                assert row["value"] > 0 and row["currency"] == ("HKD" if symbol.endswith(".HK") else "CNY")
     mini = api("/series", entity_id="0100.HK", metric_id="revenue", period="annual")
     assert any(row["period_end"] == "2025-12-31" and row["currency"] == "USD" and row["value"] == 0.079038 for row in mini)
     tencent = api("/series", entity_id="0700.HK", metric_id="revenue", period="quarterly")
@@ -144,6 +155,13 @@ def verify_browser(kind):
         if kind == "official":
             expect(page.get_by_role("heading", name="商业模式")).to_be_visible()
             expect(page.get_by_role("heading", name="目标用户")).to_be_visible()
+            order = page.locator(".company-profile, .weekly-price, .quarterly-grid").evaluate_all(
+                "(nodes) => nodes.map((node) => node.classList.contains('company-profile') ? 'company' : "
+                "node.classList.contains('weekly-price') ? 'price' : 'quarterly')"
+            )
+            assert order == ["company", "price", "quarterly"]
+            if any(metric["id"] == "stock_price" for metric in api("/metrics")):
+                expect(page.get_by_role("img", name="股价周线趋势图")).to_be_visible()
             expect(page.get_by_role("link", name="资料来源 · 小米集团 2025 年年度报告")).to_be_visible()
             page.get_by_text("指标数据来源", exact=True).click()
             expect(page.get_by_role("link", name="小米 2026 年第二季度业绩公告")).to_be_visible()

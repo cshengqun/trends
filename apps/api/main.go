@@ -99,6 +99,7 @@ const entityProjection = `
 	LEFT JOIN LATERAL (
 		SELECT max(period_end) AS period_end, max(available_at) AS data_updated_at
 		FROM observations WHERE quality_status=$1 AND entity_id = e.id AND available_at <= now()
+			AND period_type<>'weekly'
 	) latest ON true
 `
 
@@ -162,8 +163,9 @@ func (s server) series(w http.ResponseWriter, r *http.Request) {
 		period = "annual"
 	}
 	if entity == "" || metric == "" || len(entity) > 80 || len(metric) > 80 ||
-		(period != "annual" && period != "quarterly" && period != "monthly") {
-		fail(w, 400, "invalid_query", "请指定公司、指标及有效的财务期间")
+		(period != "annual" && period != "quarterly" && period != "monthly" && period != "weekly") ||
+		((period == "weekly") != (metric == "stock_price")) {
+		fail(w, 400, "invalid_query", "请指定公司、指标及有效的数据期间")
 		return
 	}
 	s.query(w, r, `SELECT CASE WHEN
@@ -171,6 +173,9 @@ func (s server) series(w http.ResponseWriter, r *http.Request) {
 		THEN coalesce((SELECT jsonb_agg(to_jsonb(t) ORDER BY period_end) FROM (`+observationProjection+`
 			JOIN (SELECT DISTINCT ON (period_end) o2.id FROM observations o2 JOIN sources origin ON origin.id=o2.source_id
 			      WHERE entity_id=$1 AND metric_id=$2 AND period_type=$3 AND quality_status=$4 AND available_at <= now()
+			        AND ($3 <> 'weekly' OR period_end BETWEEN
+			             date_trunc('week', (now() AT TIME ZONE 'Asia/Shanghai') - interval '5 days')::date + 4 - interval '103 weeks'
+			             AND date_trunc('week', (now() AT TIME ZONE 'Asia/Shanghai') - interval '5 days')::date + 4)
 			      ORDER BY period_end, (origin.kind <> 'official'), revision DESC) latest ON latest.id=o.id
 		) t), '[]') END`, entity, metric, period, s.quality())
 }
@@ -259,6 +264,7 @@ func (s server) evidence(w http.ResponseWriter, r *http.Request) {
 func (s server) overview(w http.ResponseWriter, r *http.Request) {
 	s.query(w, r, `WITH published AS (
 		SELECT entity_id, period_end, available_at FROM observations WHERE quality_status=$1 AND available_at<=now()
+			AND period_type<>'weekly'
 	) SELECT jsonb_build_object(
 		'company_count', (SELECT count(DISTINCT entity_id) FROM published),
 		'insight_count', (SELECT count(*) FROM insights WHERE data_kind=$2),
