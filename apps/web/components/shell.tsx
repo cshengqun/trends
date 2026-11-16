@@ -55,7 +55,7 @@ export function Shell({ children }: { children: ReactNode }) {
     <div className="main-shell">
       <header className="topbar"><CompanySearch /><DataLabel /></header>
       <main className="main-content">{children}</main>
-      <footer className="site-footer"><span>Trends · 用趋势理解世界。</span><span>{kind === "official" ? "财务与估值数据来源见个股详情" : kind === "mock" ? "全部财务数值为 Mock 模拟数据" : ""}</span></footer>
+      <footer className="site-footer"><span>Trends · 用趋势理解世界。</span>{kind === "mock" && <span>全部财务数值为 Mock 模拟数据</span>}</footer>
     </div>
   </div></DataContext.Provider>;
 }

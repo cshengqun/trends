@@ -58,7 +58,7 @@ docker compose up --build -d
 | --- | --- |
 | `/` | 跳转至股票探索 |
 | `/stocks` | 按名称、代码和市场探索公司 |
-| `/stocks/[symbol]` | 近三年六张季度指标趋势图和原始来源 |
+| `/stocks/[symbol]` | 股价周线、近三年季度指标趋势图及营收和利润指标对比 |
 
 ## API
 

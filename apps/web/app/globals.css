@@ -81,14 +81,17 @@ a { color: inherit; text-decoration: none; }
 .quarterly-card { min-width: 0; padding: 18px 18px 8px; }
 .quarterly-card h2 { margin: 0; font-size: 18px; }
 .quarterly-note { margin: 4px 0 12px; color: var(--muted); font-size: 12px; }
+.quarterly-filters { margin-bottom: 12px; }
+.quarterly-summaries { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 16px; }
+.quarterly-summaries .quarterly-value { flex-wrap: wrap; gap: 0 8px; }
+.quarterly-series-name { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+.quarterly-series-name span { width: 12px; height: 3px; border-radius: 2px; }
 .quarterly-value { display: flex; align-items: baseline; gap: 8px; min-height: 33px; }
 .quarterly-value strong { font-size: 24px; }
 .quarterly-value span, .quarterly-empty { color: var(--muted); font-size: 12px; }
 .quarterly-plot { position: relative; }
 .quarterly-plot .chart-full { height: 225px; }
 .quarterly-empty { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
-.quarterly-sources { padding: 16px; }
-.quarterly-sources summary { cursor: pointer; }
 @media (max-width: 780px) {
   .company-profile-grid, .quarterly-grid { grid-template-columns: minmax(0, 1fr); }
 }
@@ -110,6 +113,7 @@ a { color: inherit; text-decoration: none; }
 .tabs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .tabs button, .secondary-button { display: inline-flex; align-items: center; justify-content: center; min-height: 34px; padding: 5px 11px; border: 1px solid var(--border); border-radius: 7px; color: var(--muted); background: #0c151e; }
 .tabs button:hover, .tabs button.selected, .secondary-button:hover { color: var(--green); border-color: #416758; background: #142b27; }
+.quarterly-filters button[aria-pressed="true"] { color: var(--green); border-color: #416758; background: #142b27; }
 .signal-grid { margin-top: 14px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .signal-card { display: flex; min-width: 0; flex-direction: column; justify-content: space-between; gap: 15px; padding: 15px; }
 .signal-card:hover { border-color: #528c7b; background: #12232b; }

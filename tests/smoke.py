@@ -148,10 +148,23 @@ def verify_browser(kind):
         search.fill("小米")
         page.get_by_role("link", name="小米集团", exact=False).first.click()
         expect(page.get_by_role("heading", name="小米集团")).to_be_visible()
-        for metric in ("营收", "营收增长率", "利润", "利润增长率", "PE", "股息率"):
+        for metric in ("营收与利润", "营收增长率与利润增长率", "PE", "股息率"):
             expect(page.get_by_role("img", name=metric + "季度趋势图", exact=True)).to_be_visible()
-        expect(page.locator(".quarterly-plot canvas")).to_have_count(6)
+        expect(page.locator(".quarterly-plot canvas")).to_have_count(4)
+        for title, metrics in (("营收与利润", ("营收", "利润")),
+                               ("营收增长率与利润增长率", ("营收增长率", "利润增长率"))):
+            card = page.get_by_role("region", name=title, exact=True)
+            both = card.get_by_role("button", name="全部", exact=True)
+            expect(both).to_have_attribute("aria-pressed", "true")
+            for metric in metrics:
+                button = card.get_by_role("button", name=metric, exact=True)
+                button.click()
+                expect(button).to_have_attribute("aria-pressed", "true")
+                expect(card.get_by_role("img", name=metric + "季度趋势图", exact=True)).to_be_visible()
+            both.click()
+            expect(card.get_by_role("img", name=title + "季度趋势图", exact=True)).to_be_visible()
         expect(page.get_by_text("近 3 年", exact=False)).to_be_visible()
+        expect(page.get_by_text("指标数据来源", exact=True)).to_have_count(0)
         if kind == "official":
             expect(page.get_by_role("heading", name="商业模式")).to_be_visible()
             expect(page.get_by_role("heading", name="目标用户")).to_be_visible()
@@ -163,13 +176,11 @@ def verify_browser(kind):
             if any(metric["id"] == "stock_price" for metric in api("/metrics")):
                 expect(page.get_by_role("img", name="股价周线趋势图")).to_be_visible()
             expect(page.get_by_role("link", name="资料来源 · 小米集团 2025 年年度报告")).to_be_visible()
-            page.get_by_text("指标数据来源", exact=True).click()
-            expect(page.get_by_role("link", name="小米 2026 年第二季度业绩公告")).to_be_visible()
 
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True)
         mobile.goto(page.url)
         expect(mobile.get_by_role("heading", name="小米集团")).to_be_visible()
-        expect(mobile.get_by_role("img", name="营收季度趋势图", exact=True)).to_be_visible()
+        expect(mobile.get_by_role("img", name="营收与利润季度趋势图", exact=True)).to_be_visible()
         assert mobile.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
         browser.close()
 
