@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { CircleHelp } from "lucide-react";
+import { useEffect, useId, useRef, useState } from "react";
 import { Chart } from "./chart";
 import { State } from "./common";
 import { displayDate, fmt, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
@@ -82,7 +83,7 @@ function WeeklyPrice({ symbol }: { symbol: string }) {
 }
 
 function WeeklyInsights({ points, currency }: { points: Observation[]; currency: string }) {
-  const { close, trend, momentum, range, volatility, weeks } = weeklyInsights(points);
+  const { close, trend, momentum, range, weeks } = weeklyInsights(points);
   if (close === undefined) return null;
 
   const shortAverage = `${shortTrendWeeks} 周均线`;
@@ -90,6 +91,7 @@ function WeeklyInsights({ points, currency }: { points: Observation[]; currency:
   const cards = [
     {
       title: "均线趋势",
+      description: `比较最新周收盘价和 ${shortTrendWeeks} 周、${longTrendWeeks} 周均线，判断中期趋势方向。收盘价、短均线、长均线依次由高到低为多头排列，依次由低到高为空头排列。`,
       required: weeklyInsightWindows.trend,
       result: trend && {
         label: close > trend.short && trend.short > trend.long ? "收盘与均线呈多头排列" :
@@ -99,6 +101,7 @@ function WeeklyInsights({ points, currency }: { points: Observation[]; currency:
     },
     {
       title: "动量（RSI）",
+      description: `用 ${rsiWeeks} 周平滑后的平均涨幅与跌幅衡量价格动量。接近 100 表示上涨动量强，接近 0 表示下跌动量强。强趋势中，RSI 可能持续处于超买或超卖区。`,
       required: weeklyInsightWindows.momentum,
       result: momentum === null ? null : {
         label: momentum >= 70 ? "处于超买区" : momentum <= 30 ? "处于超卖区" : "处于中性区",
@@ -107,19 +110,12 @@ function WeeklyInsights({ points, currency }: { points: Observation[]; currency:
     },
     {
       title: "收盘区间",
+      description: `把最新周收盘价与此前 ${comparisonWeeks} 周的最高和最低收盘价比较，观察价格是否走出原有区间。突破后可继续观察后续周收盘能否维持在原区间之外。`,
       required: weeklyInsightWindows.range,
       result: range && {
         label: close > range.high ? "收盘突破区间上沿" :
           close < range.low ? "收盘跌破区间下沿" : "收盘处于区间内",
         evidence: `此前 ${comparisonWeeks} 周收盘范围 ${fmt(range.low, 3)}–${fmt(range.high, 3)} ${currency}`,
-      },
-    },
-    {
-      title: "收盘收益率波动",
-      required: weeklyInsightWindows.volatility,
-      result: volatility === null ? null : {
-        label: `${fmt(volatility)}%`,
-        evidence: `最近 ${comparisonWeeks} 个相邻周收盘收益率的标准差`,
       },
     },
   ];
@@ -128,13 +124,49 @@ function WeeklyInsights({ points, currency }: { points: Observation[]; currency:
     <h3>周线技术洞察</h3>
     <p className="quarterly-note">按有收盘记录的交易周计算。除权除息可能影响未复权数据的结果。</p>
     <ul className="weekly-insight-grid">
-      {cards.map(({ title, result, required }) => <li key={title}>
-        <h4>{title}</h4>
+      {cards.map(({ title, description, result, required }) => <li key={title}>
+        <WeeklyInsightTitle title={title} description={description} />
         {result ? <><strong>{result.label}</strong><p>{result.evidence}</p></> :
           <p>需要 {required} 周收盘记录，当前有 {weeks} 周。</p>}
       </li>)}
     </ul>
   </section>;
+}
+
+function WeeklyInsightTitle({ title, description }: { title: string; description: string }) {
+  const id = useId();
+  const element = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    function dismissOnEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setOpen(false);
+    }
+    function dismissOutside(event: PointerEvent) {
+      if (event.target instanceof Node && !element.current?.contains(event.target)) setOpen(false);
+    }
+    document.addEventListener("keydown", dismissOnEscape);
+    document.addEventListener("pointerdown", dismissOutside);
+    return () => {
+      document.removeEventListener("keydown", dismissOnEscape);
+      document.removeEventListener("pointerdown", dismissOutside);
+    };
+  }, [open]);
+
+  return <div ref={element} className="weekly-insight-title"
+    onPointerLeave={(event) => { if (event.pointerType === "mouse") setOpen(false); }}>
+    <h4><button type="button" aria-describedby={id}
+      onPointerEnter={(event) => { if (event.pointerType === "mouse") setOpen(true); }}
+      onFocus={(event) => { if (event.currentTarget.matches(":focus-visible")) setOpen(true); }}
+      onBlur={() => setOpen(false)}
+      onClick={() => setOpen((visible) => !visible)}>
+      {title}<CircleHelp aria-hidden="true" size={13} />
+    </button></h4>
+    <div id={id} role="tooltip" className="weekly-insight-tooltip" hidden={!open}>
+      <span>{description}</span>
+    </div>
+  </div>;
 }
 
 function QuarterlyDashboard({ end_date, points }: Dashboard) {

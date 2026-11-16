@@ -96,6 +96,14 @@ a { color: inherit; text-decoration: none; }
 .weekly-insight-grid h4, .weekly-insight-grid p { color: var(--muted); font-size: 12px; line-height: 1.55; }
 .weekly-insight-grid strong { display: block; margin-top: 4px; font-size: 14px; }
 .weekly-insight-grid p { margin-top: 4px; }
+.weekly-insight-title { position: relative; }
+.weekly-insight-title button { display: inline-flex; align-items: center; gap: 5px; min-height: 24px; }
+.weekly-insight-title button:hover, .weekly-insight-title button:focus-visible { color: var(--text); }
+.weekly-insight-tooltip { position: absolute; z-index: 1; inset-inline: 0; top: 100%; padding-top: 3px; }
+.weekly-insight-tooltip span {
+  display: block; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--base); box-shadow: 0 6px 18px #0005; color: var(--text); font-size: 12px; line-height: 1.6;
+}
 .quarterly-period { margin: 0 0 14px; color: var(--muted); }
 .quarterly-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .quarterly-card { min-width: 0; padding: 18px 18px 8px; }
