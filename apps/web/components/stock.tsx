@@ -1,11 +1,8 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { Chart } from "./chart";
 import { State } from "./common";
-import { DataLabel } from "./shell";
 import { displayDate, fmt, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
 import { useData } from "@/lib/use-data";
 
@@ -34,13 +31,14 @@ export function Stock({ symbol }: { symbol: string }) {
   const entity = useData<EntityDetail>("/entities/" + encoded);
   const dashboard = useData<Dashboard>(entity.status === "success" ? "/entities/" + encoded + "/quarterly" : null);
   return <>
-    <Link href="/stocks" className="back-link"><ArrowLeft size={16} /> 股票探索</Link>
     {entity.status === "loading" ? <State type="loading" /> : entity.status === "error" ?
       <State type="error" message={entity.message} retry={entity.retry} /> : <>
-      <div className="page-heading">
-        <div className="row gap"><span className="eyebrow mono">{entity.data.symbol} · {entity.data.exchange}</span><DataLabel /></div>
-        <h1>{entity.data.name}</h1>
-        <p>{marketName(entity.data.market)} · {entity.data.industry}</p>
+      <div className="stock-heading">
+        <div className="stock-heading-title">
+          <h1>{entity.data.name}</h1>
+          <span className="eyebrow mono">{entity.data.symbol}</span>
+        </div>
+        <p>{marketName(entity.data.market)} · {entity.data.exchange} · {entity.data.industry}</p>
       </div>
       {entity.data.profile && <section className="panel company-profile" aria-label="公司业务">
         <div className="company-profile-grid">
