@@ -1,0 +1,9 @@
+[Unit]
+Description=Refresh Trends quarterly data from AKShare monthly
+
+[Timer]
+OnCalendar=*-*-05 03:15:00 Asia/Shanghai
+Persistent=true
+
+[Install]
+WantedBy=timers.target

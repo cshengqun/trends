@@ -1,0 +1,10 @@
+[Unit]
+Description=Trends AKShare quarterly data sync
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+TimeoutStartSec=20min
+ExecStart=/usr/bin/docker run --rm --network twin_default --env-file /opt/trends/shared/akshare.env trends-akshare:current --quarters 8
