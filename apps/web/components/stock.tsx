@@ -5,6 +5,7 @@ import { Chart } from "./chart";
 import { State } from "./common";
 import { displayDate, fmt, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
 import { useData } from "@/lib/use-data";
+import { comparisonWeeks, longTrendWeeks, rsiWeeks, shortTrendWeeks, weeklyInsights, weeklyInsightWindows } from "@/lib/weekly-insights";
 
 const quarterlyCharts = [
   { title: "营收与利润", unit: "billion", note: "单季营业收入与归母净利润", metrics: [
@@ -75,7 +76,64 @@ function WeeklyPrice({ symbol }: { symbol: string }) {
         <a className="text-link weekly-price-source" href={latest.document_ref} target="_blank" rel="noreferrer">
           {latest.source_label}
         </a>
+        <WeeklyInsights points={points} currency={latest.currency} />
       </>}
+  </section>;
+}
+
+function WeeklyInsights({ points, currency }: { points: Observation[]; currency: string }) {
+  const { close, trend, momentum, range, volatility, weeks } = weeklyInsights(points);
+  if (close === undefined) return null;
+
+  const shortAverage = `${shortTrendWeeks} 周均线`;
+  const longAverage = `${longTrendWeeks} 周均线`;
+  const cards = [
+    {
+      title: "均线趋势",
+      required: weeklyInsightWindows.trend,
+      result: trend && {
+        label: close > trend.short && trend.short > trend.long ? "收盘与均线呈多头排列" :
+          close < trend.short && trend.short < trend.long ? "收盘与均线呈空头排列" : "收盘与均线方向未同步",
+        evidence: `${shortAverage} ${fmt(trend.short, 3)} · ${longAverage} ${fmt(trend.long, 3)} ${currency}`,
+      },
+    },
+    {
+      title: "动量（RSI）",
+      required: weeklyInsightWindows.momentum,
+      result: momentum === null ? null : {
+        label: momentum >= 70 ? "处于超买区" : momentum <= 30 ? "处于超卖区" : "处于中性区",
+        evidence: `RSI(${rsiWeeks}) 为 ${fmt(momentum)} · 超买 ≥ 70，超卖 ≤ 30`,
+      },
+    },
+    {
+      title: "收盘区间",
+      required: weeklyInsightWindows.range,
+      result: range && {
+        label: close > range.high ? "收盘突破区间上沿" :
+          close < range.low ? "收盘跌破区间下沿" : "收盘处于区间内",
+        evidence: `此前 ${comparisonWeeks} 周收盘范围 ${fmt(range.low, 3)}–${fmt(range.high, 3)} ${currency}`,
+      },
+    },
+    {
+      title: "收盘收益率波动",
+      required: weeklyInsightWindows.volatility,
+      result: volatility === null ? null : {
+        label: `${fmt(volatility)}%`,
+        evidence: `最近 ${comparisonWeeks} 个相邻周收盘收益率的标准差`,
+      },
+    },
+  ];
+
+  return <section className="weekly-insights" aria-label="周线技术洞察">
+    <h3>周线技术洞察</h3>
+    <p className="quarterly-note">按有收盘记录的交易周计算。除权除息可能影响未复权数据的结果。</p>
+    <ul className="weekly-insight-grid">
+      {cards.map(({ title, result, required }) => <li key={title}>
+        <h4>{title}</h4>
+        {result ? <><strong>{result.label}</strong><p>{result.evidence}</p></> :
+          <p>需要 {required} 周收盘记录，当前有 {weeks} 周。</p>}
+      </li>)}
+    </ul>
   </section>;
 }
 
