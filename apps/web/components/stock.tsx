@@ -72,7 +72,9 @@ function QuarterlyDashboard({ end_date, points }: Dashboard) {
       {filings.map((source) => <div key={source.source_id} className="source-card"><Database size={19} /><div>
         <strong>{source.source_kind === "mock" ? source.source_label :
           <a className="text-link" href={source.document_ref} target="_blank" rel="noreferrer">{source.source_label}</a>}</strong>
-        <p>{source.published_at ? "披露 " + displayDate(source.published_at) : "计算版本 " + source.calculation_version}</p>
+        <p>{source.market_date ? "交易日 " + displayDate(source.market_date) :
+          source.published_at ? "披露 " + displayDate(source.published_at) :
+          source.source_kind === "licensed" ? "上线 " + displayDate(source.available_at) : "计算版本 " + source.calculation_version}</p>
         {source.supporting_documents?.map((doc) => <p key={doc.url}>
           <a className="text-link" href={doc.url} target="_blank" rel="noreferrer">计算依据 · {doc.label}</a>
         </p>)}

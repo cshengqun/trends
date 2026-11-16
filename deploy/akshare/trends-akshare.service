@@ -8,3 +8,4 @@ Wants=network-online.target
 Type=oneshot
 TimeoutStartSec=20min
 ExecStart=/usr/bin/docker run --rm --network twin_default --env-file /opt/trends/shared/akshare.env trends-akshare:current --quarters 8
+ExecStartPost=/usr/bin/docker run --rm --network twin_default --env-file /opt/trends/shared/akshare.env --env-file /opt/trends/shared/akshare-publish.env --entrypoint python trends-akshare:current /app/services/data-pipeline/publish_akshare.py

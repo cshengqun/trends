@@ -32,7 +32,7 @@ export function DataLabel({ kind }: { kind?: DataKind }) {
   const resolved = kind ?? context;
   if (!resolved) return null;
   return <span className={resolved === "official" ? "mock-label official-label" : "mock-label"}>
-    <span />{resolved === "official" ? "官方披露" : "MOCK"}
+    <span />{resolved === "official" ? "真实数据" : "MOCK"}
   </span>;
 }
 
@@ -55,7 +55,7 @@ export function Shell({ children }: { children: ReactNode }) {
     <div className="main-shell">
       <header className="topbar"><CompanySearch /><DataLabel /></header>
       <main className="main-content">{children}</main>
-      <footer className="site-footer"><span>Trends · 用趋势理解世界。</span><span>{kind === "official" ? "数据以发行人披露为准" : kind === "mock" ? "全部财务数值为 Mock 模拟数据" : ""}</span></footer>
+      <footer className="site-footer"><span>Trends · 用趋势理解世界。</span><span>{kind === "official" ? "财务与估值数据来源见个股详情" : kind === "mock" ? "全部财务数值为 Mock 模拟数据" : ""}</span></footer>
     </div>
   </div></DataContext.Provider>;
 }

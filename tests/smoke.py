@@ -105,9 +105,15 @@ def verify_disclosures_api():
     assert months.get("2025-12-31") == 754.1 and months.get("2026-06-30") == 766.5
     assert "2026-05-31" not in months
     assert api("/series", entity_id="1810.HK", metric_id="revenue", period="monthly") == []
-    assert all(row["quality_status"] == "verified" and row["source_kind"] == "official" and
-               row["document_ref"].startswith("https://") and row["published_at"]
+    assert all(row["quality_status"] == "verified" and row["document_ref"].startswith("https://")
                for row in mini + tencent + mau)
+    assert all(row["source_kind"] == "official" and row["published_at"] for row in mini + mau)
+    assert all(row["source_kind"] in ("official", "licensed") for row in tencent)
+    if "pe_ttm" in by_metric:
+        for metric in ("pe_ttm", "dividend_yield"):
+            market_points = by_metric[metric].values()
+            assert all(point["source_kind"] == "licensed" and point["market_date"] <= point["period_end"]
+                       for point in market_points)
     signals = api("/insights", entity_id="0700.HK", limit=100)
     signal = next(item for item in signals if item["metric_id"] == "revenue" and
                   item["period_type"] == "quarterly" and item["period_end"] == "2026-06-30")

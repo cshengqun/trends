@@ -126,9 +126,10 @@ func (s server) entity(w http.ResponseWriter, r *http.Request) {
 			SELECT DISTINCT ON (o.metric_id) o.metric_id, m.name, m.category, m.display_order,
 				o.value, o.unit, o.currency, o.period_end, o.period_type
 			FROM observations o JOIN metrics m ON m.id=o.metric_id
+			JOIN sources origin ON origin.id=o.source_id
 			WHERE o.entity_id=t.id AND o.quality_status=$1 AND o.available_at <= now()
 			ORDER BY o.metric_id, CASE o.period_type WHEN 'monthly' THEN 1 WHEN 'quarterly' THEN 2 ELSE 3 END,
-				o.period_end DESC, o.revision DESC
+				o.period_end DESC, (origin.kind <> 'official'), o.revision DESC
 		) metric
 	), 'available_series', (
 		SELECT coalesce(jsonb_agg(to_jsonb(series) ORDER BY metric_id, period_type), '[]') FROM (
@@ -148,7 +149,7 @@ const observationProjection = `
 	SELECT o.id, o.entity_id, o.metric_id, m.name AS metric_name, o.period_start, o.period_end,
 	       o.period_type, o.published_at, o.available_at, o.value, o.currency, o.unit, o.source_id,
 	       o.calculation_version, o.quality_status, o.revision, s.kind AS source_kind,
-	       s.label AS source_label, s.document_ref,
+	       s.label AS source_label, s.document_ref, s.raw_payload->>'market_date' AS market_date,
 	       coalesce(s.raw_payload->'supporting_documents', '[]'::jsonb) AS supporting_documents
 	FROM observations o JOIN sources s ON s.id=o.source_id JOIN metrics m ON m.id=o.metric_id
 `
@@ -167,9 +168,9 @@ func (s server) series(w http.ResponseWriter, r *http.Request) {
 	s.query(w, r, `SELECT CASE WHEN
 		EXISTS (SELECT 1 FROM entities WHERE id=$1) AND EXISTS (SELECT 1 FROM metrics WHERE id=$2)
 		THEN coalesce((SELECT jsonb_agg(to_jsonb(t) ORDER BY period_end) FROM (`+observationProjection+`
-			JOIN (SELECT DISTINCT ON (period_end) id FROM observations
+			JOIN (SELECT DISTINCT ON (period_end) o2.id FROM observations o2 JOIN sources origin ON origin.id=o2.source_id
 			      WHERE entity_id=$1 AND metric_id=$2 AND period_type=$3 AND quality_status=$4 AND available_at <= now()
-			      ORDER BY period_end, revision DESC) latest ON latest.id=o.id
+			      ORDER BY period_end, (origin.kind <> 'official'), revision DESC) latest ON latest.id=o.id
 		) t), '[]') END`, entity, metric, period, s.quality())
 }
 
@@ -177,12 +178,12 @@ func (s server) quarterlyDashboard(w http.ResponseWriter, r *http.Request) {
 	s.query(w, r, `WITH quarter_window AS (
 		SELECT (date_trunc('quarter', now() AT TIME ZONE 'Asia/Shanghai')::date - 1) AS end_date
 	), selected AS (
-		SELECT DISTINCT ON (metric_id, period_end) id
-		FROM observations, quarter_window
+		SELECT DISTINCT ON (metric_id, period_end) o.id
+		FROM observations o JOIN sources origin ON origin.id=o.source_id CROSS JOIN quarter_window
 		WHERE entity_id=$1 AND quality_status=$2 AND period_type='quarterly' AND available_at<=now()
 		  AND metric_id IN ('revenue','net_income','pe_ttm','dividend_yield')
 		  AND period_end > end_date - interval '4 years' AND period_end <= end_date
-		ORDER BY metric_id, period_end, revision DESC
+		ORDER BY metric_id, period_end, (origin.kind <> 'official'), revision DESC
 	), base AS (`+observationProjection+` JOIN selected ON o.id=selected.id), points AS (
 		SELECT to_jsonb(b) AS point, b.metric_id, b.period_end FROM base b
 		UNION ALL

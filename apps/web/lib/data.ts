@@ -18,6 +18,7 @@ export type Observation = Point & {
   id: number; metric_name: string; metric_id: string; currency: string; unit: string;
   published_at: string | null; available_at: string; source_id: string; source_label: string;
   source_kind: string; document_ref: string; calculation_version: string; quality_status: string;
+  market_date?: string | null;
   supporting_documents?: { url: string; label: string }[];
   period_start: string; period_type: Period;
 };
