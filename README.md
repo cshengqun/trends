@@ -86,7 +86,7 @@ docker compose up --build -d
 
 同步使用 `AKSHARE_DATABASE_URL` 连接独立的 `trends_akshare` 库。任务保留每次运行与缺失记录，已拉取的季度数据保留来源与修订历史。相同结果重复运行会复用现有版本。
 
-股价用独立的 `trends-weekly-prices.timer`，北京时间每周六 08:15 从 AKShare 更新。每个有交易的自然周取最后一个交易日的未复权收盘价，保留实际交易日期和计价币种。
+股价用独立的 `trends-weekly-prices.timer`，北京时间每周六 08:15 更新。每只股票从数据库中最新已保存周的下一周开始请求行情，漏跑时补查后续周。首次初始化和手动 `--backfill` 拉取近两年。每个有交易的自然周取最后一个交易日的未复权收盘价，保留实际交易日期和计价币种。
 
 配置公开展示权限后，同步成功会调用 `publish_akshare.py`，通过 `AKSHARE_PUBLISH_DATABASE_URL` 把通过校验的财务与估值数据发布至 `trends_disclosures`。相同期间和指标优先显示发行人原始披露，两项同比由公开 API 按展示值计算。估值数据保留季末实际交易日及上游来源。
 
