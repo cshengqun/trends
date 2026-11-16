@@ -9,6 +9,7 @@ export const weeklyInsightWindows = {
   trend: longTrendWeeks,
   momentum: rsiWeeks + 1,
   range: comparisonWeeks + 1,
+  volatility: comparisonWeeks + 1,
 };
 
 function mean(values: number[]) {
@@ -43,5 +44,12 @@ export function weeklyInsights(points: readonly Point[]) {
     const priorCloses = closes.slice(-weeklyInsightWindows.range, -1);
     range = { low: Math.min(...priorCloses), high: Math.max(...priorCloses) };
   }
-  return { close, trend, momentum, range, weeks: closes.length };
+  let volatility = null;
+  if (closes.length >= weeklyInsightWindows.volatility) {
+    const history = closes.slice(-weeklyInsightWindows.volatility);
+    const returns = history.slice(1).map((value, index) => value / history[index] - 1);
+    const averageReturn = mean(returns);
+    volatility = 100 * Math.sqrt(mean(returns.map((value) => (value - averageReturn) ** 2)));
+  }
+  return { close, trend, momentum, range, volatility, weeks: closes.length };
 }

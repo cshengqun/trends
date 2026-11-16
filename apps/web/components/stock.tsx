@@ -83,7 +83,7 @@ function WeeklyPrice({ symbol }: { symbol: string }) {
 }
 
 function WeeklyInsights({ points, currency }: { points: Observation[]; currency: string }) {
-  const { close, trend, momentum, range, weeks } = weeklyInsights(points);
+  const { close, trend, momentum, range, volatility, weeks } = weeklyInsights(points);
   if (close === undefined) return null;
 
   const shortAverage = `${shortTrendWeeks} 周均线`;
@@ -116,6 +116,15 @@ function WeeklyInsights({ points, currency }: { points: Observation[]; currency:
         label: close > range.high ? "收盘突破区间上沿" :
           close < range.low ? "收盘跌破区间下沿" : "收盘处于区间内",
         evidence: `此前 ${comparisonWeeks} 周收盘范围 ${fmt(range.low, 3)}–${fmt(range.high, 3)} ${currency}`,
+      },
+    },
+    {
+      title: `${comparisonWeeks} 周收益率波动`,
+      description: `用最近 ${weeklyInsightWindows.volatility} 个周收盘价算出 ${comparisonWeeks} 个相邻周的涨跌幅，再求标准差。数值越高，表示这些周涨跌幅围绕平均值越分散。结果为未年化的周波动率。`,
+      required: weeklyInsightWindows.volatility,
+      result: volatility === null ? null : {
+        label: `${fmt(volatility)}%`,
+        evidence: `最近 ${comparisonWeeks} 个周收盘收益率的标准差`,
       },
     },
   ];
