@@ -89,6 +89,25 @@ a { color: inherit; text-decoration: none; }
 .weekly-price { margin-bottom: 24px; padding: 18px; }
 .weekly-price h2 { margin: 0; font-size: 18px; }
 .weekly-price-source { font-size: 12px; }
+.weekly-event-summary, .weekly-drawdown {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px;
+  color: var(--muted); font-size: 12px; line-height: 1.55;
+}
+.weekly-event-summary { padding: 2px 0 8px; }
+.weekly-event-legend { display: flex; flex-wrap: wrap; gap: 0 10px; }
+.weekly-event-up { color: var(--green); }
+.weekly-event-down { color: var(--orange); }
+.weekly-event-return { color: #b5adff; }
+.weekly-drawdown {
+  padding: 8px 12px; margin: 0 0 8px; border: 1px solid var(--border);
+  border-radius: 8px; background: var(--panel-raised);
+}
+.weekly-drawdown strong { color: var(--text); font-size: 15px; }
+.weekly-drawdown button.text-link { min-height: 24px; }
+.weekly-drawdown button[aria-pressed="true"] { color: #f7d88b; }
+.weekly-event-summary .weekly-insight-tooltip, .weekly-drawdown .weekly-insight-tooltip {
+  inset-inline-end: auto; width: min(290px, calc(100vw - 75px));
+}
 .weekly-insights { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
 .weekly-insights h3 { font-size: 16px; font-weight: 650; }
 .weekly-insight-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 10px; }

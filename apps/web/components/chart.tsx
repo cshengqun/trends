@@ -3,24 +3,28 @@
 import { useEffect, useRef } from "react";
 import { init, use, type ComposeOption } from "echarts/core";
 import { BarChart, LineChart, type BarSeriesOption, type LineSeriesOption } from "echarts/charts";
-import { GridComponent, TooltipComponent, type GridComponentOption, type TooltipComponentOption } from "echarts/components";
+import { GridComponent, MarkPointComponent, TooltipComponent, type GridComponentOption, type TooltipComponentOption } from "echarts/components";
 import { CanvasRenderer } from "echarts/renderers";
 import { fmt, periodLabel, periodNames, type Period, type Point } from "@/lib/data";
 
-use([BarChart, LineChart, GridComponent, TooltipComponent, CanvasRenderer]);
+use([BarChart, LineChart, GridComponent, MarkPointComponent, TooltipComponent, CanvasRenderer]);
 
 type Option = ComposeOption<BarSeriesOption | LineSeriesOption | GridComponentOption | TooltipComponentOption>;
 type ChartSeries = { points: Point[]; label: string; color: string };
+export type ChartMarker = {
+  point: Point; name: string; color: string; symbol: "triangle" | "diamond" | "circle" | "emptyCircle";
+  rotate?: number; size?: number;
+};
 const dayMilliseconds = 86_400_000;
 
 function monthIndex(value: string) {
   return Number(value.slice(0, 4)) * 12 + Number(value.slice(5, 7)) - 1;
 }
 
-export function Chart({ points, series, unit, label, mode = "line", size = "full", down = false, axisUnit, period = "annual", startDate, endDate }: {
+export function Chart({ points, series, unit, label, mode = "line", size = "full", down = false, axisUnit, period = "annual", startDate, endDate, markers }: {
   unit: string; label: string; mode?: "line" | "bar";
   size?: "full" | "spark" | "hero"; down?: boolean; axisUnit?: string; period?: Period;
-  startDate?: string; endDate?: string;
+  startDate?: string; endDate?: string; markers?: readonly ChartMarker[];
 } & ({ points: Point[]; series?: never } | { series: ChartSeries[]; points?: never })) {
   const element = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -77,6 +81,14 @@ export function Chart({ points, series, unit, label, mode = "line", size = "full
           showSymbol: weekly ? points.length === 1 : !spark && (!hero || points.length <= 4),
           symbolSize: 6, lineStyle: { color, width: spark ? 2 : 2.5 },
           itemStyle: { color },
+          markPoint: !series && markers?.length ? {
+            label: { show: false },
+            tooltip: { trigger: "item", formatter: "{b}" },
+            data: markers.map(({ point, name, color, symbol, rotate, size }) => ({
+              name, coord: [String(periodLabel(point.period_end, period)), unit === "billion" ? point.value * 10 : point.value],
+              symbol, symbolRotate: rotate, symbolSize: size ?? 11, itemStyle: { color },
+            })),
+          } : undefined,
           areaStyle: series ? undefined : { color: {
             type: "linear", x: 0, y: 0, x2: 0, y2: 1,
             colorStops: [{ offset: 0, color: down ? "#f4a37d29" : "#64efbc38" }, { offset: 1, color: "#64efbc00" }],
@@ -88,7 +100,7 @@ export function Chart({ points, series, unit, label, mode = "line", size = "full
     const observer = new ResizeObserver(() => graph.resize());
     observer.observe(element.current);
     return () => { observer.disconnect(); graph.dispose(); };
-  }, [points, series, unit, label, mode, size, down, axisUnit, period, startDate, endDate]);
+  }, [points, series, unit, label, mode, size, down, axisUnit, period, startDate, endDate, markers]);
   return <div ref={element} className={`chart chart-${size}`} role={size === "spark" ? undefined : "img"}
     aria-hidden={size === "spark" || undefined} aria-label={size === "spark" ? undefined : label + periodNames[period] + "趋势图"} />;
 }

@@ -1,12 +1,13 @@
 "use client";
 
 import { CircleHelp } from "lucide-react";
-import { useEffect, useId, useRef, useState } from "react";
-import { Chart } from "./chart";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
+import { Chart, type ChartMarker } from "./chart";
 import { State } from "./common";
 import { displayDate, fmt, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
 import { useData } from "@/lib/use-data";
-import { comparisonWeeks, longTrendWeeks, rsiWeeks, shortTrendWeeks, weeklyInsights, weeklyInsightWindows } from "@/lib/weekly-insights";
+import { comparisonWeeks, drawdownWeeks, longTrendWeeks, rsiWeeks, shortTrendWeeks, weeklyBreakouts,
+  weeklyInsights, weeklyInsightWindows, weeklyMaximumDrawdown } from "@/lib/weekly-insights";
 
 const quarterlyCharts = [
   { title: "营收与利润", unit: "billion", note: "单季营业收入与归母净利润", metrics: [
@@ -73,13 +74,86 @@ function WeeklyPrice({ symbol }: { symbol: string }) {
           <strong className="mono">{fmt(latest.value, 3)}</strong>
           <span>{latest.currency} · {displayDate(latest.market_date ?? latest.period_end)}</span>
         </div>
-        <Chart points={points} unit="price" label="股价" axisUnit={latest.currency} period="weekly" />
+        <WeeklyPriceChart key={symbol} points={points} currency={latest.currency} />
         <a className="text-link weekly-price-source" href={latest.document_ref} target="_blank" rel="noreferrer">
           {latest.source_label}
         </a>
         <WeeklyInsights points={points} currency={latest.currency} />
       </>}
   </section>;
+}
+
+const breakoutColors = { up: "#64efbc", down: "#f4a37d", returned: "#b5adff" };
+const breakoutLabels = { up: "突破", down: "跌破" };
+const followUpLabels = { confirmed: "已确认", returned: "回到原区间", reversed: "反向越过原区间" };
+
+function WeeklyPriceChart({ points, currency }: { points: Observation[]; currency: string }) {
+  const [showDrawdown, setShowDrawdown] = useState(false);
+  const chart = useRef<HTMLDivElement>(null);
+  const events = useMemo(() => weeklyBreakouts(points), [points]);
+  const drawdown = useMemo(() => weeklyMaximumDrawdown(points), [points]);
+  const latest = events.at(-1);
+  const markers = useMemo(() => {
+    const byWeek = new Map<string, ChartMarker>();
+    function add(marker: ChartMarker) {
+      const date = marker.point.period_end;
+      const previous = byWeek.get(date);
+      byWeek.set(date, { ...marker, name: previous ? previous.name + " · " + marker.name : marker.name });
+    }
+    for (const event of events) {
+      const up = event.direction === "up";
+      const boundary = up ? event.range.high : event.range.low;
+      const label = breakoutLabels[event.direction];
+      const level = `${up ? "上沿" : "下沿"} ${fmt(boundary, 3)} ${currency}`;
+      add({ point: event.start, name: `${label} · ${level}`, color: breakoutColors[event.direction],
+        symbol: "triangle", rotate: up ? 0 : 180 });
+      if (event.followUp) {
+        const { point, status } = event.followUp;
+        const confirmed = status === "confirmed";
+        add({ point, name: `${label} · ${followUpLabels[status]} · ${level}`,
+          symbol: confirmed ? "diamond" : "circle", color: breakoutColors[confirmed ? event.direction : "returned"] });
+      }
+    }
+    if (showDrawdown && drawdown && drawdown.percent > 0) {
+      add({ point: drawdown.peak, name: "最大回撤起点", color: "#f7d88b", symbol: "emptyCircle", size: 16 });
+      add({ point: drawdown.trough, name: "最大回撤低点", color: "#f7d88b", symbol: "emptyCircle", size: 16 });
+    }
+    return [...byWeek.values()];
+  }, [currency, drawdown, events, showDrawdown]);
+
+  function toggleDrawdown() {
+    setShowDrawdown(!showDrawdown);
+    if (!showDrawdown) chart.current?.scrollIntoView({ block: "nearest" });
+  }
+
+  return <>
+    <div ref={chart}>
+      <Chart points={points} unit="price" label="股价" axisUnit={currency} period="weekly" markers={markers} />
+    </div>
+    <div className="weekly-event-summary">
+      <WeeklyInsightTitle title="突破确认" level="h3" description={`首次越过此前 ${comparisonWeeks} 个有收盘记录的交易周区间时记录边界。下一有收盘记录的交易周仍在同一边界外即确认，收盘碰到原边界也算回到原区间。`} />
+      {latest ? <p>最近事件 · {displayDate(latest.followUp?.point.period_end ?? latest.start.period_end)} · {breakoutLabels[latest.direction]}
+        {" · "}{latest.followUp ? followUpLabels[latest.followUp.status] : "待确认"}</p> :
+        <p>{points.length > comparisonWeeks ? "图中暂无突破或跌破" : `需要至少 ${comparisonWeeks + 1} 周收盘记录`}</p>}
+      {latest ? <ul className="weekly-event-legend" aria-label="突破标记图例">
+        <li><span className="weekly-event-up" aria-hidden="true">▲</span> 突破</li>
+        <li><span className="weekly-event-down" aria-hidden="true">▼</span> 跌破</li>
+        <li><span aria-hidden="true">◆</span> 确认</li>
+        <li><span className="weekly-event-return" aria-hidden="true">●</span> 回到或反向越过原区间</li>
+      </ul> : null}
+    </div>
+    <div className="weekly-drawdown">
+      <WeeklyInsightTitle title={`${drawdownWeeks} 周最大回撤`} level="h3"
+        description={`以最新周为起点向前取 ${drawdownWeeks} 个自然周，找出从一个周收盘高点到其后低点的最大跌幅。使用未复权收盘价，休市周跳过。`} />
+      {drawdown ? <>
+        <strong className="mono">{fmt(-drawdown.percent || 0)}%</strong>
+        {drawdown.percent > 0 ? <>
+          <span>{displayDate(drawdown.peak.market_date ?? drawdown.peak.period_end)} → {displayDate(drawdown.trough.market_date ?? drawdown.trough.period_end)}</span>
+          <button type="button" className="text-link" onClick={toggleDrawdown} aria-pressed={showDrawdown}>在图上定位</button>
+        </> : null}
+      </> : <span>需要覆盖 {drawdownWeeks} 个自然周的收盘记录</span>}
+    </div>
+  </>;
 }
 
 function WeeklyInsights({ points, currency }: { points: Observation[]; currency: string }) {
@@ -142,7 +216,9 @@ function WeeklyInsights({ points, currency }: { points: Observation[]; currency:
   </section>;
 }
 
-function WeeklyInsightTitle({ title, description }: { title: string; description: string }) {
+function WeeklyInsightTitle({ title, description, level: Heading = "h4" }: {
+  title: string; description: string; level?: "h3" | "h4";
+}) {
   const id = useId();
   const element = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -165,13 +241,13 @@ function WeeklyInsightTitle({ title, description }: { title: string; description
 
   return <div ref={element} className="weekly-insight-title"
     onPointerLeave={(event) => { if (event.pointerType === "mouse") setOpen(false); }}>
-    <h4><button type="button" aria-describedby={id}
+    <Heading><button type="button" aria-describedby={id}
       onPointerEnter={(event) => { if (event.pointerType === "mouse") setOpen(true); }}
       onFocus={(event) => { if (event.currentTarget.matches(":focus-visible")) setOpen(true); }}
       onBlur={() => setOpen(false)}
       onClick={() => setOpen((visible) => !visible)}>
       {title}<CircleHelp aria-hidden="true" size={13} />
-    </button></h4>
+    </button></Heading>
     <div id={id} role="tooltip" className="weekly-insight-tooltip" hidden={!open}>
       <span>{description}</span>
     </div>
