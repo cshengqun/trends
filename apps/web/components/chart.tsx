@@ -10,7 +10,7 @@ import { fmt, periodLabel, periodNames, type Period, type Point } from "@/lib/da
 use([BarChart, LineChart, GridComponent, MarkPointComponent, TooltipComponent, CanvasRenderer]);
 
 type Option = ComposeOption<BarSeriesOption | LineSeriesOption | GridComponentOption | TooltipComponentOption>;
-type ChartSeries = { points: Point[]; label: string; color: string };
+export type ChartSeries = { points: Point[]; label: string; color: string; dashed?: boolean };
 export type ChartMarker = {
   point: Point; name: string; color: string; symbol: "triangle" | "diamond" | "circle" | "emptyCircle";
   rotate?: number; size?: number;
@@ -70,7 +70,7 @@ export function Chart({ points, series, unit, label, mode = "line", size = "full
         axisLabel: { show: !hero, color: "#889eab", fontSize: 11 },
         splitLine: { lineStyle: { color: "#243640", type: "dashed" } },
       },
-      series: plots.map(({ label: name, color, points, values }): BarSeriesOption | LineSeriesOption => {
+      series: plots.map(({ label: name, color, points, values, dashed }): BarSeriesOption | LineSeriesOption => {
         const data = indices.map((index) => values.get(index) ?? null);
         if (mode === "bar") return {
           type: "bar", name, data, barMaxWidth: 34,
@@ -79,7 +79,7 @@ export function Chart({ points, series, unit, label, mode = "line", size = "full
         return {
           type: "line", name, data, connectNulls: false, smooth: weekly || series ? false : 0.23,
           showSymbol: weekly ? points.length === 1 : !spark && (!hero || points.length <= 4),
-          symbolSize: 6, lineStyle: { color, width: spark ? 2 : 2.5 },
+          symbolSize: 6, lineStyle: { color, width: spark ? 2 : 2.5, type: dashed ? "dashed" : "solid" },
           itemStyle: { color },
           markPoint: !series && markers?.length ? {
             label: { show: false },

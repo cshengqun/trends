@@ -296,6 +296,7 @@ func (s server) routes(web http.Handler, basePath string) http.Handler {
 	mux.HandleFunc("GET "+api+"/v1/entities", s.entities)
 	mux.HandleFunc("GET "+api+"/v1/entities/{id}", s.entity)
 	mux.HandleFunc("GET "+api+"/v1/entities/{id}/quarterly", s.quarterlyDashboard)
+	mux.HandleFunc("GET "+api+"/v1/entities/{id}/earnings-forecast", s.earningsForecast)
 	mux.HandleFunc("GET "+api+"/v1/metrics", s.metrics)
 	mux.HandleFunc("GET "+api+"/v1/series", s.series)
 	mux.HandleFunc("GET "+api+"/v1/insights", s.insights)

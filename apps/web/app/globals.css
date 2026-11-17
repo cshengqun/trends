@@ -124,6 +124,13 @@ a { color: inherit; text-decoration: none; }
   background: var(--base); box-shadow: 0 6px 18px #0005; color: var(--text); font-size: 12px; line-height: 1.6;
 }
 .quarterly-period { margin: 0 0 14px; color: var(--muted); }
+.upcoming-earnings { margin-bottom: 24px; padding: 18px; }
+.upcoming-earnings h2 { margin: 0; font-size: 18px; }
+.upcoming-earnings-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); gap: 10px; }
+.upcoming-earnings-grid > div { padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel-raised); }
+.upcoming-earnings-grid h3 { color: var(--muted); font-size: 13px; }
+.upcoming-earnings-grid .quarterly-note:last-child { margin-bottom: 0; }
+.upcoming-earnings-sources { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 10px; font-size: 12px; }
 .quarterly-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
 .quarterly-card { min-width: 0; padding: 18px 18px 8px; }
 .quarterly-card h2 { margin: 0; font-size: 18px; }

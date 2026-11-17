@@ -2,9 +2,10 @@
 
 import { CircleHelp } from "lucide-react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
-import { Chart, type ChartMarker } from "./chart";
+import { Chart, type ChartMarker, type ChartSeries } from "./chart";
 import { State } from "./common";
-import { displayDate, fmt, marketName, metricUnit, metricValue, periodLabel, type EntityDetail, type Observation } from "@/lib/data";
+import { deltaLabel, displayDate, fmt, marketName, metricUnit, metricValue, periodLabel,
+  type EarningsEstimate, type EntityDetail, type Observation } from "@/lib/data";
 import { useData } from "@/lib/use-data";
 import { comparisonWeeks, drawdownWeeks, longTrendWeeks, rsiWeeks, shortTrendWeeks, weeklyBreakouts,
   weeklyInsights, weeklyInsightWindows, weeklyMaximumDrawdown } from "@/lib/weekly-insights";
@@ -33,6 +34,7 @@ export function Stock({ symbol }: { symbol: string }) {
   const encoded = encodeURIComponent(symbol);
   const entity = useData<EntityDetail>("/entities/" + encoded);
   const dashboard = useData<Dashboard>(entity.status === "success" ? "/entities/" + encoded + "/quarterly" : null);
+  const forecast = useData<{ points: EarningsEstimate[] }>("/entities/" + encoded + "/earnings-forecast");
   return <>
     {entity.status === "loading" ? <State type="loading" /> : entity.status === "error" ?
       <State type="error" message={entity.message} retry={entity.retry} /> : <>
@@ -53,10 +55,54 @@ export function Stock({ symbol }: { symbol: string }) {
         </a>
       </section>}
       <WeeklyPrice symbol={symbol} />
+      {forecast.status === "success" && forecast.data.points.length > 0 ?
+        <UpcomingEarnings points={forecast.data.points} /> : null}
+      {forecast.status === "error" ? <section className="panel upcoming-earnings" aria-label="下一期业绩预期">
+        <h2>下一期业绩预期</h2><State type="error" message={forecast.message} retry={forecast.retry} />
+      </section> : null}
       {dashboard.status === "loading" ? <State type="loading" /> : dashboard.status === "error" ?
-        <State type="error" message={dashboard.message} retry={dashboard.retry} /> : <QuarterlyDashboard {...dashboard.data} />}
+        <State type="error" message={dashboard.message} retry={dashboard.retry} /> :
+        <QuarterlyDashboard {...dashboard.data} estimates={forecast.status === "success" ? forecast.data.points : []} />}
     </>}
   </>;
+}
+
+function UpcomingEarnings({ points }: { points: EarningsEstimate[] }) {
+  const { period_type, period_end } = points[0];
+  const period = period_type === "quarterly" ? periodLabel(period_end, "quarterly") :
+    `${period_end.slice(0, 4)} 财年 · ${period_type === "annual" ? "全年" : "半年"}截至 ${displayDate(period_end)}`;
+  const sources = new Map(points.map(({ source_url, source_label }) => [source_url, source_label]));
+
+  return <section className="panel upcoming-earnings" aria-label="下一期业绩预期">
+    <h2>下一期业绩预期</h2>
+    <p className="quarterly-note">{period}</p>
+    <div className="upcoming-earnings-grid">
+      {quarterlyCharts[0].metrics.map(({ id, name }) => {
+        const point = points.find(({ metric_id }) => metric_id === id);
+        const growth = point?.growth != null ? `预计同比 ${deltaLabel(point.growth, "%")}` :
+          id === "net_income" && point?.prior_value != null && point.prior_value < 0 ?
+            point.value > 0 ? "预计转盈" : point.value === 0 ? "预计盈亏平衡" :
+              point.value > point.prior_value ? "预计减亏" :
+                point.value < point.prior_value ? "预计亏损扩大" : "预计亏损持平" : null;
+        const derived = point?.method === "annual_less_ytd";
+        return <div key={id}>
+          <h3>预计{name}</h3>
+          {point ? <>
+            <div className="quarterly-value"><strong className="mono">{metricValue(point.value, "billion")}</strong>
+              <span>{metricUnit("billion", point.currency)}</span></div>
+            {growth ? <p className="quarterly-note">{growth}</p> : null}
+            <p className="quarterly-note">{derived ? "全年预期减前三季度实绩" : "机构预期"}
+              {point.analyst_count ? ` · ${derived ? "全年预期覆盖 " : ""}${point.analyst_count} 家机构` : ""}
+              {" · 记录于 "}{displayDate(point.captured_at)}</p>
+          </> : <p className="quarterly-note">暂无本财期预期</p>}
+        </div>;
+      })}
+    </div>
+    <div className="upcoming-earnings-sources">
+      {[...sources].map(([url, label]) => <a key={url} className="text-link" href={url} target="_blank"
+        rel="noreferrer">{label}</a>)}
+    </div>
+  </section>;
 }
 
 function WeeklyPrice({ symbol }: { symbol: string }) {
@@ -254,7 +300,7 @@ function WeeklyInsightTitle({ title, description, level: Heading = "h4" }: {
   </div>;
 }
 
-function QuarterlyDashboard({ end_date, points }: Dashboard) {
+function QuarterlyDashboard({ end_date, points, estimates }: Dashboard & { estimates: EarningsEstimate[] }) {
   const endYear = Number(end_date.slice(0, 4));
   const endQuarter = Math.ceil(Number(end_date.slice(5, 7)) / 3);
   const startMonth = new Date(Date.UTC(endYear, (endQuarter - 12) * 3 + 2, 1)).toISOString().slice(0, 10);
@@ -262,14 +308,15 @@ function QuarterlyDashboard({ end_date, points }: Dashboard) {
     <p className="quarterly-period">近 3 年 · {periodLabel(startMonth, "quarterly")} 至 {periodLabel(end_date, "quarterly")}</p>
     <div className="quarterly-grid">
       {quarterlyCharts.map((chart) =>
-        <QuarterlyCard key={chart.title} chart={chart} points={points} startDate={startMonth} endDate={end_date} />
+        <QuarterlyCard key={chart.title} chart={chart} points={points} estimates={estimates}
+          startDate={startMonth} endDate={end_date} />
       )}
     </div>
   </>;
 }
 
-function QuarterlyCard({ chart, points, startDate, endDate }: {
-  chart: QuarterlyChart; points: Observation[]; startDate: string; endDate: string;
+function QuarterlyCard({ chart, points, estimates, startDate, endDate }: {
+  chart: QuarterlyChart; points: Observation[]; estimates: EarningsEstimate[]; startDate: string; endDate: string;
 }) {
   const [selected, setSelected] = useState<string | null>(null);
   const { title, unit, note, metrics } = chart;
@@ -280,10 +327,26 @@ function QuarterlyCard({ chart, points, startDate, endDate }: {
       color: index === 0 ? "#64efbc" : "#b5adff" };
   }).filter((metric) => selected === null || selected === metric.id);
   const axisUnit = metricUnit(unit, series.find(({ latest }) => latest)?.latest?.currency);
+  const projected: ChartSeries[] = [];
+  let plotEnd = endDate;
+  if (comparison) {
+    for (const metric of series) {
+      const estimate = estimates.find(({ period_type, metric_id }) => period_type === "quarterly" &&
+        (metric.id === metric_id || metric.id === (metric_id === "revenue" ? "revenue_growth" : "profit_growth")));
+      const value = unit === "%" ? estimate?.growth : estimate?.value;
+      if (!metric.latest || !estimate || value == null || (unit !== "%" && metric.latest.currency !== estimate.currency)) continue;
+      const [year, month] = estimate.period_end.split("-").map(Number);
+      const priorEnd = new Date(Date.UTC(year, month - 3, 0)).toISOString().slice(0, 10);
+      if (metric.latest.period_end !== priorEnd) continue;
+      projected.push({ label: `${metric.name}（预期）`, color: metric.color, dashed: true,
+        points: [metric.latest, { period_end: estimate.period_end, value }] });
+      if (estimate.period_end > plotEnd) plotEnd = estimate.period_end;
+    }
+  }
 
   return <section className="panel quarterly-card" aria-label={title}>
     <h2>{title}</h2>
-    <p className="quarterly-note">{note}</p>
+    <p className="quarterly-note">{note}{projected.length > 0 ? " · 虚线为预期" : ""}</p>
     {comparison ? <div className="tabs quarterly-filters" role="group" aria-label="显示指标">
       <button type="button" aria-pressed={selected === null} onClick={() => setSelected(null)}>全部</button>
       {metrics.map((metric) => <button key={metric.id} type="button" aria-pressed={selected === metric.id}
@@ -302,9 +365,9 @@ function QuarterlyCard({ chart, points, startDate, endDate }: {
       </div>)}
     </div>
     <div className="quarterly-plot">
-      <Chart {...(comparison ? { series } : { points: series[0].points })}
+      <Chart {...(comparison ? { series: [...series, ...projected] } : { points: series[0].points })}
         unit={unit} label={series.map(({ label }) => label).join("与")} axisUnit={axisUnit}
-        period="quarterly" startDate={startDate} endDate={endDate} />
+        period="quarterly" startDate={startDate} endDate={plotEnd} />
       {!comparison && !series[0].latest ? <span className="quarterly-empty">{series[0].empty}</span> : null}
     </div>
   </section>;

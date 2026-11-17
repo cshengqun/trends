@@ -27,6 +27,19 @@ export type Observation = Point & {
   period_start: string; period_type: Period;
 };
 
+export type EarningsEstimate = Point & {
+  metric_id: "revenue" | "net_income";
+  period_type: "quarterly" | "semiannual" | "annual";
+  captured_at: string;
+  method: "consensus" | "annual_less_ytd";
+  currency: string;
+  growth: number | null;
+  prior_value: number | null;
+  analyst_count: number | null;
+  source_label: string;
+  source_url: string;
+};
+
 export type Insight = {
   id: string; entity_id: string; entity_name: string; symbol: string; category: string;
   rule_id: string; title: string; summary: string; metric_name: string; metric_id: string;

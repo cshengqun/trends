@@ -1,0 +1,10 @@
+[Unit]
+Description=Publish Trends earnings forecasts
+Requires=docker.service
+After=docker.service network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+TimeoutStartSec=10min
+ExecStart=/usr/bin/docker run --rm --network twin_default --env-file /opt/trends/shared/akshare-publish.env --entrypoint python trends-akshare:current /app/services/data-pipeline/sync_earnings_forecasts.py
